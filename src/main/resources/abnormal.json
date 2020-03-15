@@ -1,0 +1,161 @@
+{"root":[
+  {"ycxw": [
+            {
+            "name": "fwqyc",
+            "ycxwData": [
+              {
+                "eventCode": "0x00",
+                "fakesysIP": "195.35.175.84",
+                " sysAreaName ": "Minhang",
+                " userID ": "0x0000",
+                " trueSysID ": "0x0001"
+              }
+            ]
+            },
+            {
+            "name": "dccskl",
+            "ycxwData": [
+              {
+                "eventCode": "0x01",
+                " sysType ": "个人",
+                " sysID ": "0x0002",
+                " userID ": "0x0003",
+                " sysIP ": "123.46.78.234",
+                " sysAreaName ": "Huangpu"
+              }
+            ]
+            },
+            {
+            "name": "kpbxyc",
+            "ycxwData": [
+              {
+                "eventCode": "0x03",
+                " credIssueUserID ": ["0x0004", "0x0104", "0x0204"],
+                " credReceptUser ": "Lisi",
+                " credReceptUserID ": "0x0005",
+                " credIssueEntID ":  ["0x0006", "0x0106", "0x0206"],
+                " entAppID ":  ["0x0007", "0x0107", "0x0207"],
+                " entAppIP ": "85.68.215.124",
+                " entAppAreaName ": "Jingan",
+                " credReimUserID ":  ["0x0008", "0x0108", "0x0208"],
+                " credUseUserID ": "0x0009",
+                " credSavSysIP ": "18.54.194.57",
+                " credSavSysName ": "XXXX"
+              }
+            ]
+            },
+            {
+            "name": "typjpfbgzt",
+            "ycxwData": [
+              {
+                " eventCode": "0x11",
+                " credID ": "0x000A",
+                " changeUserID ": ["0x000B", "0x023B", "0x085B"],
+                " SysIP ": ["125.253.24.67", "146.13.244.198"],
+                " changeSysID[] ":  ["0x000C", "0x123B"],
+                " changeNum ": "5"
+              }
+            ]
+            },
+            {
+            "name": "tyyhpfbgzt",
+            "ycxwData": [
+              {
+                " eventCode": "0x11",
+                " credID ": "0x000A",
+                " changeUserID ": "0x2D6C",
+                " SysIP ": ["175.213.22.67", "46.123.24.18"],
+                " changeSysID[] ":  ["0x020C", "0x82B4"],
+                " changeNum ": "2"
+              }
+            ]
+            },
+            {
+            "name": "yhxtrzyc",
+            "ycxwData": [
+              {
+                " eventCode": "0x0B",
+                " authSys ": "XXXX",
+                " authSysID ": "0x070C", 
+                " authCertierID ": "0x002A",
+                " authCertiSysIP ": "125.253.24.67",
+                " authCertiSysAreaName ": "Changning",
+                " authCertierEntID ": "0x000D",
+                " certiNum ": "3"
+              }
+            ]
+            },
+            {
+            "name": "zsrzyc",
+            "ycxwData": [
+              {
+                " eventCode": "0x02",
+                 " certiOwnerID ": "0x003E",
+                " certiSenderID ": "0x001F",
+                " certiNum ": "7"
+              }
+            ]
+            },
+            {
+            "name": "ztcyhzyc",
+            "ycxwData": [
+              {
+                " eventCode": "0x0A",
+                " credID ": "0x63B9",
+                " checkSysIP ": "238.23.135.87",
+                " checkSysID ": "0x0010",
+                " credIssueSysIP ": "192.46.18.53",
+                " credIssueSysID ": "0x0011",
+                " userID ": "0x0012",
+                " credIssueUserID ": "0x0013",
+                " entID ": "0x0014",
+                " credIssueEntID ": "0x0015"
+              }
+            ]
+            },
+            {
+            "name": "tyyhqidcyc",
+            "aqsjData": [
+              {
+                " userID ": "0x15",
+                " entID ": "",
+                " ycxwData ":[
+                    {
+                    " eventCode": "0x03",
+                    " eventNum ": "2",
+                    " eventTime": ["15368467", "17593856"]
+                    },
+                    {
+                    " eventCode": "0x05",
+                    " eventNum ": "3",
+                    " eventTime": ["16868467", "17593256", "13993856"]
+                    }
+                ]
+              }
+            ]
+            },
+            {
+            "name": "btyhqiycxw",
+            "aqsjData": [
+              {
+                " userID ": ["0x17", "0x1C"],
+                " entID ": [""],
+                " ycxwData ":[
+                    {
+                    " eventCode": "0x07",
+                    " eventNum ": "2",
+                    " eventTime": ["19378467", "15275640"]
+                    },
+                    {
+                    " eventCode": "0x0B",
+                    " eventNum ": "3",
+                    " eventTime": ["11588467", "16273256", "19464856"]
+                    }
+                ]
+              }
+            ]
+            }
+        ]
+  }
+  ]
+}
