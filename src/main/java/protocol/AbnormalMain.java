@@ -9,6 +9,9 @@ import java.net.SocketAddress;
 public class AbnormalMain {
 
     public static void main(String args[]){
+        /**
+         * add handle json
+         */
 
         String jsonPath = MessageProtocol.class.getClassLoader().getResource("test.json").getPath();
         MessageProtocol mp = new MessageProtocol();
