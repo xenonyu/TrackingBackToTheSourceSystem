@@ -55,7 +55,7 @@ public class main_pro {
 				}
 				case 3:{
 					Journal.write(user, "调用应急联动处置接口");
-					abnormal_process_main.main(args);
+					AbnormalProcessMain.main(args);
 					break;
 				}
 				case 4:{

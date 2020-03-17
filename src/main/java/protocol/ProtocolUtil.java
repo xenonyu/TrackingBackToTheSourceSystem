@@ -144,20 +144,15 @@ public class ProtocolUtil {
      * @param inputStream
      * @return BasicProtocol
      */
-    public static BasicProtocol readInputStream(DataInputStream inputStream) {
-        try {
-            BasicProtocol basicProtocol = readHead(inputStream);
-            byte[] jsonByte = new byte[basicProtocol.getMessageLen() - BasicProtocol.HEADER_LEN];
-            int jsonByteLen = inputStream.read(jsonByte);
-            if(jsonByteLen != basicProtocol.getMessageLen() - BasicProtocol.HEADER_LEN) return null;
-            basicProtocol.parseBinary(jsonByte);
+    public static BasicProtocol readInputStream(DataInputStream inputStream) throws IOException {
 
-            return basicProtocol;
-        } catch (Exception e) {
-            System.out.println("receive fail");
-            e.printStackTrace();
-        }
-        return null;
+        BasicProtocol basicProtocol = readHead(inputStream);
+        byte[] jsonByte = new byte[basicProtocol.getMessageLen() - BasicProtocol.HEADER_LEN];
+        int jsonByteLen = inputStream.read(jsonByte);
+        if(jsonByteLen != basicProtocol.getMessageLen() - BasicProtocol.HEADER_LEN) return null;
+        basicProtocol.parseBinary(jsonByte);
+
+        return basicProtocol;
     }
 
 
@@ -168,17 +163,12 @@ public class ProtocolUtil {
      * @param protocol
      * @param outputStream
      */
-    public static boolean writeOutputStream(BasicProtocol protocol, DataOutputStream outputStream) {
-        try {
+    public static boolean writeOutputStream(BasicProtocol protocol, DataOutputStream outputStream) throws IOException {
 //            System.out.println("return message Len: " + protocol.getMessageLen() + " true len: " + protocol.getMessage().length());
-            outputStream.write(protocol.getData());
-            outputStream.flush();
-            System.out.println("message contained: " + protocol.getMessageLen() + " bytes are sent.");
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        outputStream.write(protocol.getData());
+        outputStream.flush();
+        System.out.println("message contained: " + protocol.getMessageLen() + " bytes are sent.");
+        return true;
     }
 
     public static byte[] str2ByteArrays(String str, int maxLength) {

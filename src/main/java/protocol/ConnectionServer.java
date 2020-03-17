@@ -14,7 +14,7 @@ public class ConnectionServer {
         ServerSocket serverSocket=null;
         ExecutorService executorService=Executors.newCachedThreadPool();
         try {
-            serverSocket=new ServerSocket(13001);
+            serverSocket=new ServerSocket(Config.PORT);
             while (isStart) {
                 Socket socket = serverSocket.accept();
                 String userIP=socket.getInetAddress().getHostAddress();

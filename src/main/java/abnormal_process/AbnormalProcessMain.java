@@ -2,7 +2,7 @@ package abnormal_process;
 import java.sql.SQLException;
 import Public.DB_Operation;
 //应急联动处置接口
-public class abnormal_process_main {
+public class AbnormalProcessMain {
 	public static void AuthAbBehavior() throws SQLException {
 		//列出所有认证异常行为的信息
 		String[]ColumnName = new String[13];

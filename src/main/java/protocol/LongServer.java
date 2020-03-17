@@ -2,6 +2,7 @@ package protocol;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.Random;
 import java.util.Timer;
@@ -101,7 +102,11 @@ public class LongServer implements Runnable {
                 BasicProtocol bp = reciverData.poll();
                 if(bp!=null){
                     System.out.println("------:"+bp.getMessage());
-                    ProtocolUtil.writeOutputStream(bp,outputStream);
+                    try {
+                        ProtocolUtil.writeOutputStream(bp,outputStream);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

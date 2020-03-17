@@ -1,33 +1,30 @@
 {"root":[
   {"ycxw": [
             {
-            "name": "fwqyc",
-            "ycxwData": [
-              {
+              "name": "fwqyc",
+              "ycxwData":{
                 "eventCode": "0x00",
                 "fakesysIP": "195.35.175.84",
                 " sysAreaName ": "Minhang",
                 " userID ": "0x0000",
                 " trueSysID ": "0x0001"
               }
-            ]
             },
             {
-            "name": "dccskl",
-            "ycxwData": [
-              {
-                "eventCode": "0x01",
-                " sysType ": "个人",
-                " sysID ": "0x0002",
-                " userID ": "0x0003",
-                " sysIP ": "123.46.78.234",
-                " sysAreaName ": "Huangpu"
-              }
-            ]
+              "name": "dccskl",
+              "ycxwData":
+                {
+                  "eventCode": "0x01",
+                  " sysType ": "个人",
+                  " sysID ": "0x0002",
+                  " userID ": "0x0003",
+                  " sysIP ": "123.46.78.234",
+                  " sysAreaName ": "Huangpu"
+                }
             },
             {
             "name": "kpbxyc",
-            "ycxwData": [
+            "ycxwData":
               {
                 "eventCode": "0x03",
                 " credIssueUserID ": ["0x0004", "0x0104", "0x0204"],
@@ -42,7 +39,6 @@
                 " credSavSysIP ": "18.54.194.57",
                 " credSavSysName ": "XXXX"
               }
-            ]
             },
             {
             "name": "typjpfbgzt",

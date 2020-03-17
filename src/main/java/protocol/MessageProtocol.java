@@ -18,7 +18,7 @@ public class MessageProtocol extends BasicProtocol {
     private String senderId = "1000000000000002";
     private String receiverId = "1000000000000001";
 
-    public void setMessage(String message){ this.jsonStr = message; setMessageLen(message.length() + BasicProtocol.HEADER_LEN);}
+    public void setMessage (String message) throws java.lang.NullPointerException{ this.jsonStr = message; setMessageLen(message.length() + BasicProtocol.HEADER_LEN);}
 
     public void setMessageLen(int messageLen){ this.messageLen = messageLen; }
 
