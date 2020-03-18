@@ -29,7 +29,7 @@ public abstract class BasicProtocol {
             baos.write(ProtocolUtil.str2ByteArrays(getSenderId()), 0, SENDER_ID_LEN);
             baos.write(ProtocolUtil.str2ByteArrays(getReceiverId()), 0, RECEIVER_ID_LEN);
             baos.write(ProtocolUtil.str2ByteArrays(getMessage(), getMessage().length()), 0, getMessageLen()-HEADER_LEN);
-            System.out.println(baos.toByteArray().length);
+//            System.out.println(baos.toByteArray().length);
 
 //            baos.write(ProtocolUtil.int2ByteArrays(getSecureMode()), 0, SECURE_MODE_LEN);
 //            baos.write(ProtocolUtil.int2ByteArrays(getReserved()), 0, RESERVED_LEN);

@@ -62,6 +62,7 @@ class ClientListen implements Runnable{
         try {
             while(true){
                 MessageProtocol receiver = (MessageProtocol)ProtocolUtil.readInputStream(dataInputStream);
+                System.out.println("回复消息：");
                 System.out.println(receiver.getMessage());
             }
         } catch (IOException e) {
@@ -90,11 +91,17 @@ class ClientSend implements Runnable{
         try {
             while(true){
                 Scanner scanner = new Scanner(System.in);
-                System.out.println("请输入你想发送的异常：");
-                String abnormalType = scanner.nextLine();
+                AbnormalJson abmormalJson = new AbnormalJson();
+                while(abmormalJson.getMessage() == null) {
+                    System.out.println("请输入你想发送的异常：");
+                    String abnormalType = scanner.nextLine();
+                    abmormalJson = new AbnormalJson(abnormalType);
+                }
                 MessageProtocol sender = new MessageProtocol();
-                AbnormalJson abmormalJson = new AbnormalJson(abnormalType);
                 sender.setMessage(abmormalJson.getMessage());
+                System.out.println("the Json array sent:\n" + abmormalJson.getMessage());
+                System.out.println("the byte array sent:");
+                System.out.println(ProtocolUtil.byte2hex(sender.getData()));
                 ProtocolUtil.writeOutputStream(sender, dataOutputStream);
             }
         } catch (IOException e) {

@@ -66,10 +66,19 @@ public class ProtocolUtil {
      */
     public static BasicProtocol readHead(DataInputStream inputStream){
         try {
-            byte[] version = new byte[BasicProtocol.VER_LEN];
-            int verLen = inputStream.read(version);
+            int verLen = 0;
+            byte[] version = {};
+            int count = 0;
+            while(verLen != BasicProtocol.VER_LEN){
+
+                version = new byte[BasicProtocol.VER_LEN];
+                verLen = inputStream.read(version);
+//                System.out.println("version count" + count++);
+            }
             System.out.println("received version: " + byteArrayToInt(version));
+
             if (verLen != BasicProtocol.VER_LEN) {
+                System.out.println("verlen: " + verLen + " received len: " + BasicProtocol.VER_LEN);
                 return null;
             }
 
