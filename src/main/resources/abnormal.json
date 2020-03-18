@@ -2,7 +2,7 @@
   {
     "name": "fwqyc",
     "ycxwData":{
-      "threatID":"10001",
+      "threatID":"100050",
       "timeStamp":"123456788",
       "threatType": 256,
       "uploadSysID":"11111",
@@ -80,7 +80,7 @@
   "name": "kpbxyc",
   "ycxwData":
     {
-      "threatID":"10004",
+      "threatID":"100242",
       "timeStamp":"123456788",
       "threatType": 768,
       "uploadSysID":"11111",
@@ -100,7 +100,7 @@
       "timeStamp":"123456788",
       "threatType": 769,
       "uploadSysID":"11111",
-      "threatUserID": ["0x0006", "0x0106", "0x0206"],
+      "threatUserID": "0x0006",
       "threatEnterpriseID": "",
       "threatCredenID": "",
       "threatIP": "85.68.215.124",
@@ -112,11 +112,11 @@
     "name": "jfpbx",
     "ycxwData":
     {
-      "threatID":"10003",
+      "threatID":"100034",
       "timeStamp":"123456788",
       "threatType": 770,
       "uploadSysID":"11111",
-      "threatUserID": ["0x0006", "0x0106", "0x0206"],
+      "threatUserID": "0x0006",
       "threatEnterpriseID": "",
       "threatCredenID": "",
       "threatIP": "85.68.215.124",
@@ -142,54 +142,6 @@
   },
   {
     "name": "tyqydsjkjdldepj",
-    "ycxwData":
-    {
-      "threatID":"10003",
-      "timeStamp":"123456788",
-      "threatType": 768,
-      "uploadSysID":"11111",
-      "threatUserID": ["0x0006", "0x0106", "0x0206"],
-      "threatEnterpriseID": "",
-      "threatCredenID": "",
-      "threatIP": "85.68.215.124",
-      "threatIPSegment": "",
-      "otherMsg":"Huangpu"
-    }
-  },
-  {
-    "name": "kpbxyc",
-    "ycxwData":
-    {
-      "threatID":"10003",
-      "timeStamp":"123456788",
-      "threatType": 768,
-      "uploadSysID":"11111",
-      "threatUserID": ["0x0006", "0x0106", "0x0206"],
-      "threatEnterpriseID": "",
-      "threatCredenID": "",
-      "threatIP": "85.68.215.124",
-      "threatIPSegment": "",
-      "otherMsg":"Huangpu"
-    }
-  },
-  {
-    "name": "kpbxyc",
-    "ycxwData":
-    {
-      "threatID":"10003",
-      "timeStamp":"123456788",
-      "threatType": 768,
-      "uploadSysID":"11111",
-      "threatUserID": ["0x0006", "0x0106", "0x0206"],
-      "threatEnterpriseID": "",
-      "threatCredenID": "",
-      "threatIP": "85.68.215.124",
-      "threatIPSegment": "",
-      "otherMsg":"Huangpu"
-    }
-  },
-  {
-    "name": "kpbxyc",
     "ycxwData":
     {
       "threatID":"10003",
