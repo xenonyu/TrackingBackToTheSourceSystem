@@ -34,8 +34,10 @@ public class LongClient {
             DataInputStream dataInputStream;
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
-            new Thread(new ClientListen(socket, dataInputStream)).start();
-            new Thread(new ClientSend(socket, dataOutputStream)).start();
+            Thread listen = new Thread(new ClientListen(socket, dataInputStream));
+            Thread send = new Thread(new ClientSend(socket, dataOutputStream, listen));
+            listen.start();
+            send.start();
 
 //            new Thread(new ClientHeart(socket, dataOutputStream)).start();
         } catch (IOException e) {
@@ -56,6 +58,10 @@ public class LongClient {
 
         }
     }
+
+    public void stop(){
+
+    }
 }
 
 
@@ -73,6 +79,10 @@ class ClientListen implements Runnable{
                 MessageProtocol receiver = (MessageProtocol)ProtocolUtil.readInputStream(dataInputStream);
                 System.out.println("回复消息：");
                 System.out.println(receiver.getMessage());
+//                synchronized(this){
+//                    this.notify();
+//                }
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -93,20 +103,30 @@ class ClientListen implements Runnable{
 class ClientSend implements Runnable{
     private Socket socket;
     private DataOutputStream dataOutputStream;
-    ClientSend(Socket socket, DataOutputStream dataOutputStream){
+    Thread listen;
+    ClientSend(Socket socket, DataOutputStream dataOutputStream, Thread listen){
         this.socket = socket;
         this.dataOutputStream = dataOutputStream;
+        this.listen = listen;
     }
 
     public void run() {
         try {
-
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(System.in));
             String input;
-            while(true){
+            while(br.ready()){
+
+                try{
+                    Thread.sleep(1000);
+                }catch (InterruptedException e){
+                    System.out.println("send task get interrupt...");
+                }
 
                 System.out.println("请输入你想发送的异常：");
                 Scanner scanner = new Scanner(System.in);
                 input = scanner.nextLine();
+
                 AbnormalJson abmormalJson = new AbnormalJson(input);
 
                 if(abmormalJson.getMessage() != null){
@@ -116,6 +136,10 @@ class ClientSend implements Runnable{
                     System.out.println("the byte array sent:\n" +ProtocolUtil.byte2hex(sender.getData()));
                     ProtocolUtil.writeOutputStream(sender, dataOutputStream);
                 }
+//                synchronized (listen){
+//                    listen.wait();
+//                }
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -128,7 +152,6 @@ class ClientSend implements Runnable{
                 ee.printStackTrace();
             }
         }
-
     }
 }
 

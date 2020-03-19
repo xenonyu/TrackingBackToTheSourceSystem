@@ -51,7 +51,7 @@ public class AbnormalJson {
         setThreatID(Long.toString(getmicTime()));
         setTimeStamp(Long.toString(getmicTime()));
         setThreatType(threatTypeArray.get(threatType));
-        setUploadSysID("1000000000000002");
+        setUploadSysID("100002");
         setThreatUserID("49509946");
         setThreatEnterpriseID("34433691");
         setThreatCredenID("4134312");
