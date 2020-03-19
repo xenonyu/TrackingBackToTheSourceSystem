@@ -25,12 +25,9 @@ public class AbnormalJson {
     private String[] threatIPArray = {"123.46.78.234", "123.46.78.242", "123.45.78.234"};
     private static Map<String, Integer> threatTypeArray = new HashMap<String, Integer>();
     static {
-        threatTypeArray.put("服务器异常", 0x0100);
         threatTypeArray.put("服务器仿冒", 0x0101);
         threatTypeArray.put("假系统连接", 0x0102);
-        threatTypeArray.put("多次尝试口令", 0x0200);
         threatTypeArray.put("用户多次尝试口令", 0x0201);
-        threatTypeArray.put("开票报销异常", 0x0301 );
         threatTypeArray.put("重复报销、作废/冲红凭据报销", 0x0301);
         threatTypeArray.put("假发票报销", 0x0302);
         threatTypeArray.put("同一企业短时间开具大量凭据", 0x0303 );
@@ -38,37 +35,43 @@ public class AbnormalJson {
         threatTypeArray.put("同一企业异常时间开具大量凭据", 0x0305 );
         threatTypeArray.put("同一企业异常时间开具大额凭据", 0x0306 );
         threatTypeArray.put("同一用户跨企业异常时间开具大量凭据", 0x0307 );
-        threatTypeArray.put("同一用户或同一企业发生多次异常行为", 0x0800 );
+        threatTypeArray.put("同一用户跨企业异常时间开具大量大额凭据", 0x0308 );
+        threatTypeArray.put("同一用户短时间跨企业开具大量大额凭据", 0x0309 );
+        threatTypeArray.put("受票企业发生多次异常行为/开票企业发生多次异常行为", 0x0801 );
     }
 
     public AbnormalJson() {
 
     }
     public AbnormalJson(String threatType){
-        //timeStamp是String类型的时间戳
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        setThreatID(simpleDateFormat.format(date));
-        setTimeStamp(simpleDateFormat.format(date));
+        /**
+         *timeStamp是String类型的时间戳
+         * 这里设置发送消息
+         * */
+        setThreatID(Long.toString(getmicTime()));
+        setTimeStamp(Long.toString(getmicTime()));
         setThreatType(threatTypeArray.get(threatType));
-        setUploadSysID("uploadSysID");
-        setThreatUserID("threatUserID");
-        setThreatEnterpriseID("enterpriseID");
-        setThreatCredenID("threatCredenID");
-        final Random random = new Random();
-        setThreatIP(threatIPArray[random.nextInt(threatIPArray.length)]);
-        setThreatIPSegment(threatIPArray[random.nextInt(threatIPArray.length)] + "/" + random.nextInt(24));
+        setUploadSysID("1000000000000002");
+        setThreatUserID("49509946");
+        setThreatEnterpriseID("34433691");
+        setThreatCredenID("4134312");
+        setThreatIP(threatIPArray[getRandom(0, threatIPArray.length)]);
+        setThreatIPSegment(threatIPArray[getRandom(0, threatIPArray.length)] + "/" + getRandom(0, 24));
         setOtherMsg("");
+        /**
+         * if threat type is 0x0800 - 0x0900 add other msg
+         */
         if(getThreatType() != null){
-            if(getThreatType().equals(2048)){
-                setOtherMsg("threatType 8");
+            if(getThreatType() > 2048 && getThreatType() < 2304){
+                setOtherMsg(String.valueOf(getRandom(1, 4)));
             }
             parseJsonMessage();
         }
 
     }
+
     public static void main(String args[]){
-        AbnormalJson a = new AbnormalJson("同一用户或同一企业发生多次异常行为");
+        AbnormalJson a = new AbnormalJson("受票企业发生多次异常行为/开票企业发生多次异常行为");
 
     }
 
@@ -76,7 +79,7 @@ public class AbnormalJson {
         JSONObject targetJson = new JSONObject();
 
         targetJson.put("threatID", getThreatID());
-        targetJson.put("timestamp", getTimeStamp());
+        targetJson.put("timeStamp", getTimeStamp());
         targetJson.put("threatType", getThreatType());
         targetJson.put("uploadSysID", getUploadSysID());
         targetJson.put("threatUserID", getThreatUserID());
@@ -85,9 +88,21 @@ public class AbnormalJson {
         targetJson.put("threatIP", getThreatIP());
         targetJson.put("threatIPSegment", getThreatIPSegment());
         targetJson.put("otherMsg", getOtherMsg());
+//        System.out.println("output json: " + targetJson.toString());
         System.out.println("other msg: " + targetJson.getString("otherMsg"));
 
         setJsonMessage(targetJson.toString());
+    }
+
+    public static Long getmicTime() {
+        Long cutime = System.currentTimeMillis() * 1000; // 微秒
+        Long nanoTime = System.nanoTime(); // 纳秒
+        return cutime + (nanoTime - nanoTime / 1000000 * 1000000) / 1000;
+    }
+
+    public static int getRandom(int min, int max) {
+        int num = new Random().nextInt(max - min) + min;
+        return num;
     }
 
     public String getMessage(){

@@ -13,8 +13,6 @@ import java.util.Scanner;
 public class LongClient {
     private static Socket socket;
     public static boolean connetionState = false;
-    public static Thread listenTask;
-    public static Thread sendTask;
     public static void main(String args[]){
         while(!connetionState){
             try {
@@ -29,17 +27,15 @@ public class LongClient {
 
     private static void connect() {
         try {
-            socket = new Socket(Config.LOCAL_ADDRESS, Config.PORT);
+            socket = new Socket(Config.ADDRESS, Config.PORT);
             System.out.println("成功连接到：" + socket.getRemoteSocketAddress());
             connetionState = true;
             DataOutputStream dataOutputStream;
             DataInputStream dataInputStream;
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
-            listenTask = new Thread(new ClientListen(socket, dataInputStream));
-            sendTask = new Thread(new ClientSend(socket, dataOutputStream));
-            listenTask.start();
-            sendTask.start();
+            new Thread(new ClientListen(socket, dataInputStream)).start();
+            new Thread(new ClientSend(socket, dataOutputStream)).start();
 
 //            new Thread(new ClientHeart(socket, dataOutputStream)).start();
         } catch (IOException e) {
@@ -58,19 +54,6 @@ public class LongClient {
                 e.printStackTrace();
             }
 
-        }
-    }
-
-    public static void stopTask(){
-        System.out.println("关闭发送和接收进程；");
-        if(listenTask != null){
-            listenTask.interrupt();
-            listenTask = null;
-        }
-        if(sendTask != null){
-            sendTask.interrupt();
-//            System.out.print(sendTask.isInterrupted());
-            sendTask = null;
         }
     }
 }
@@ -103,7 +86,6 @@ class ClientListen implements Runnable{
             }
         } catch (Exception e) {
             e.printStackTrace();
-            LongClient.stopTask();
         }
     }
 }
@@ -118,11 +100,12 @@ class ClientSend implements Runnable{
 
     public void run() {
         try {
-            Scanner scanner = new Scanner(System.in);
+
             String input;
-            while(LongClient.connetionState){
+            while(true){
 
                 System.out.println("请输入你想发送的异常：");
+                Scanner scanner = new Scanner(System.in);
                 input = scanner.nextLine();
                 AbnormalJson abmormalJson = new AbnormalJson(input);
 
