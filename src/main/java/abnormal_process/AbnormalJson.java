@@ -89,7 +89,7 @@ public class AbnormalJson {
         targetJson.put("threatIPSegment", getThreatIPSegment());
         targetJson.put("otherMsg", getOtherMsg());
 //        System.out.println("output json: " + targetJson.toString());
-        System.out.println("other msg: " + targetJson.getString("otherMsg"));
+//        System.out.println("other msg: " + targetJson.getString("otherMsg"));
 
         setJsonMessage(targetJson.toString());
     }

@@ -9,20 +9,56 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.Scanner;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class LongClient {
     private static Socket socket;
     public static boolean connetionState = false;
+    public static Thread listen;
+    public static Thread send;
+    public static Integer[] synchronize = new Integer[2];
     public static void main(String args[]){
         while(!connetionState){
             try {
                 connect();
+//                showThread();
                 Thread.sleep(3000);
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
+    }
+
+    public static void showThread(){
+        while(true) {
+
+            ThreadGroup group = Thread.currentThread().getThreadGroup();
+            ThreadGroup topGroup = group;
+            // 遍历线程组树，获取根线程组
+            while (group != null) {
+                topGroup = group;
+                group = group.getParent();
+            }
+            // 激活的线程数再加一倍，防止枚举时有可能刚好有动态线程生成
+            int slackSize = topGroup.activeCount() * 2;
+            Thread[] slackThreads = new Thread[slackSize];
+            // 获取根线程组下的所有线程，返回的actualSize便是最终的线程数
+            int actualSize = topGroup.enumerate(slackThreads);
+            Thread[] atualThreads = new Thread[actualSize];
+            // 复制slackThreads中有效的值到atualThreads
+            System.arraycopy(slackThreads, 0, atualThreads, 0, actualSize);
+            System.out.println("Threads size is " + atualThreads.length);
+            for (Thread thread : atualThreads) {
+                System.out.println("Thread name : " + thread.getName() + thread.getState());
+            }
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private static void connect() {
@@ -34,8 +70,8 @@ public class LongClient {
             DataInputStream dataInputStream;
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
-            Thread listen = new Thread(new ClientListen(socket, dataInputStream));
-            Thread send = new Thread(new ClientSend(socket, dataOutputStream, listen));
+            listen = new Thread(new ClientListen(socket, dataInputStream));
+            send = new Thread(new ClientSend(socket, dataOutputStream));
             listen.start();
             send.start();
 
@@ -55,12 +91,20 @@ public class LongClient {
             }catch (Exception e){
                 e.printStackTrace();
             }
-
         }
     }
 
-    public void stop(){
-
+    public static void stopTask(){
+        System.out.println("关闭发送和接收进程；");
+        if(listen != null){
+            listen.interrupt();
+            listen = null;
+        }
+        if(send != null){
+            send.interrupt();
+//            System.out.print(sendTask.isInterrupted());
+            send = null;
+        }
     }
 }
 
@@ -79,9 +123,13 @@ class ClientListen implements Runnable{
                 MessageProtocol receiver = (MessageProtocol)ProtocolUtil.readInputStream(dataInputStream);
                 System.out.println("回复消息：");
                 System.out.println(receiver.getMessage());
-//                synchronized(this){
-//                    this.notify();
-//                }
+                LongClient.synchronize[0]--;
+                synchronized(LongClient.synchronize){
+                    if(LongClient.synchronize[0] == 0) {
+                        System.out.println("free send thread....");
+                        LongClient.synchronize.notifyAll();
+                    }
+                }
 
             }
         } catch (IOException e) {
@@ -89,6 +137,7 @@ class ClientListen implements Runnable{
             try{
                 System.out.println("接收线程异常。");
                 socket.close();
+                LongClient.stopTask();
                 LongClient.connetionState = false;
                 LongClient.reConnect();
             } catch (Exception ee){
@@ -103,11 +152,10 @@ class ClientListen implements Runnable{
 class ClientSend implements Runnable{
     private Socket socket;
     private DataOutputStream dataOutputStream;
-    Thread listen;
-    ClientSend(Socket socket, DataOutputStream dataOutputStream, Thread listen){
+
+    ClientSend(Socket socket, DataOutputStream dataOutputStream){
         this.socket = socket;
         this.dataOutputStream = dataOutputStream;
-        this.listen = listen;
     }
 
     public void run() {
@@ -115,17 +163,22 @@ class ClientSend implements Runnable{
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(System.in));
             String input;
-            while(br.ready()){
+            System.out.println("请输入你想发送的异常：");
+            while(!Thread.interrupted() && LongClient.connetionState){
 
-                try{
-                    Thread.sleep(1000);
-                }catch (InterruptedException e){
-                    System.out.println("send task get interrupt...");
+                if (!br.ready()){
+                    try{
+                        Thread.sleep(1000);
+                        continue;
+                    }catch (InterruptedException e) {
+                        System.out.println("send task get interrupt...");
+                        if (!LongClient.connetionState)
+                            socket.close();
+                        return;
+                    }
                 }
 
-                System.out.println("请输入你想发送的异常：");
-                Scanner scanner = new Scanner(System.in);
-                input = scanner.nextLine();
+                input = br.readLine();
 
                 AbnormalJson abmormalJson = new AbnormalJson(input);
 
@@ -136,9 +189,22 @@ class ClientSend implements Runnable{
                     System.out.println("the byte array sent:\n" +ProtocolUtil.byte2hex(sender.getData()));
                     ProtocolUtil.writeOutputStream(sender, dataOutputStream);
                 }
-//                synchronized (listen){
-//                    listen.wait();
-//                }
+                else{
+                    continue;
+                }
+                System.out.println(System.identityHashCode(LongClient.synchronize));
+                LongClient.synchronize[0] = 2;
+                System.out.println(System.identityHashCode(LongClient.synchronize));
+
+                synchronized (LongClient.synchronize){
+                    try{
+                        LongClient.synchronize.wait();
+                    }
+                    catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println("请输入你想发送的异常：");
 
             }
         } catch (IOException e) {
@@ -146,6 +212,7 @@ class ClientSend implements Runnable{
             try{
                 System.out.println("发送线程异常。");
                 socket.close();
+                LongClient.stopTask();
                 LongClient.connetionState = false;
                 LongClient.reConnect();
             } catch (Exception ee){
