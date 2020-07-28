@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TracingBackToTheSourceSystem:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/TracingBackToTheSourceSystem_jar</output-path>
+    <root id="archive" name="TracingBackToTheSourceSystem.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="TracingBackToTheSourceSystem" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/alibaba/fastjson/1.2.47/fastjson-1.2.47.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

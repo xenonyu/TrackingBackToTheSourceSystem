@@ -20,37 +20,34 @@ public class AbnormalProcessMain {
 		ColumnName[10] = "authCertiSysID";
 		ColumnName[11] = "authCertiSysAreaName";
 		ColumnName[12] = "certiOwnerID";
-		information = DB_Operation.SelectMore("*", "abbehavior.authabtable", ColumnName, 13);
+		information = DB_Operation.SelectMore("*", "abbehavior.authabtable", ColumnName, ColumnName.length);
 		if(information[0][0]!=null) 
 			System.out.println("The authentication abnormal behavior messages are as follows:");
 		for(int i=0; i<100; i++) {
 			if(information[i][0]==null) break;
-			for(int j=0; j<13; j++)
+			for(int j=0; j<ColumnName.length; j++)
 				System.out.print(ColumnName[j]+":"+information[i][j]+"  ");
 			System.out.println();
 		}
 	}
 	public static void CredAbBehavior() throws SQLException {
 		//列出所有凭据异常行为的信息
-		String[]ColumnName = new String[11];
+		String[]ColumnName = new String[8];
 		String[][]information = new String[100][11];
 		ColumnName[0] = "abBehaviorID";
 		ColumnName[1] = "eventCode";
 		ColumnName[2] = "credIssueUserID";
-		ColumnName[3] = "credReceptUser";
+		ColumnName[3] = "credReceptUserID";
 		ColumnName[4] = "credIssueEntID";
-		ColumnName[5] = "entAppID";
-		ColumnName[6] = "entAppAreaName";
-		ColumnName[7] = "credReimUserID";
-		ColumnName[8] = "credUseUser";
-		ColumnName[9] = "credReimEntID";
-		ColumnName[10] = "credURL";
-		information = DB_Operation.SelectMore("*", "abbehavior.credabtable", ColumnName, 11);
+		ColumnName[5] = "entAppAreaName";
+		ColumnName[6] = "credReimUserID";
+		ColumnName[7] = "credUseUserID";
+		information = DB_Operation.SelectMore("*", "abbehavior.credabtable", ColumnName, ColumnName.length);
 		if(information[0][0]!=null) 
 			System.out.println("The credentials abnormal behavior messages are as follows:");
 		for(int i=0; i<100; i++) {
 			if(information[i][0]==null) break;
-			for(int j=0; j<11; j++)
+			for(int j=0; j<ColumnName.length; j++)
 				System.out.print(ColumnName[j]+":"+information[i][j]+"  ");
 			System.out.println();
 		}

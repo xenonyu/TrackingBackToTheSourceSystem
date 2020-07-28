@@ -63,7 +63,7 @@ public class LongClient {
 
     private static void connect() {
         try {
-            socket = new Socket(Config.ADDRESS, Config.PORT);
+            socket = new Socket(Config.LOCAL_ADDRESS, Config.PORT);
             System.out.println("成功连接到：" + socket.getRemoteSocketAddress());
             connetionState = true;
             DataOutputStream dataOutputStream;

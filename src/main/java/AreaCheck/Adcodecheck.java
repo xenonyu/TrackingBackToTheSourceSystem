@@ -10,6 +10,7 @@ public class Adcodecheck {
 		String result = sc.nextLine();
 		sc.close();
 		return result;
+
 	}
 	public static void areacheck(String adcode) throws SQLException {
 		//查询区域信息

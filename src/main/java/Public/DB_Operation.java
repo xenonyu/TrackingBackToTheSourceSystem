@@ -9,11 +9,11 @@ public class DB_Operation {
 	public static Connection con;
 	static String driver = "com.mysql.jdbc.Driver";
 	static String databaseuser = "root";
-	static String password = "password";
+	static String password = "ccflab";
 	public static void Connect(String DB_name) throws ClassNotFoundException, SQLException {
 		//数据库连接
 		Class.forName(driver);
-		String url = "jdbc:mysql://localhost:3306/"+DB_name+"?useUnicode=true&characterEncoding=utf-8&useSSL=false";
+		String url = "jdbc:mysql://202.120.39.22:33060/"+DB_name+"?useUnicode=true&characterEncoding=utf-8&useSSL=false";
 		con = DriverManager.getConnection(url,databaseuser,password);
 	}
 	public static void Close() throws SQLException {
