@@ -16,9 +16,11 @@ public class LongClient {
     public static boolean connetionState = false;
     public static Thread listen;
     public static Thread send;
+    public static String server_ip;
     public static Integer[] synchronize = new Integer[2];
-    public static void main(String args[]){
-        while(!connetionState){
+
+    public static void main(String args[]) {
+        while (!connetionState) {
             try {
                 connect();
 //                showThread();
@@ -31,23 +33,23 @@ public class LongClient {
 
     }
 
-    public static void showThread(){
-        while(true) {
+    public static void showThread() {
+        while (true) {
 
             ThreadGroup group = Thread.currentThread().getThreadGroup();
             ThreadGroup topGroup = group;
-            // ±éÀúÏß³Ì×éÊ÷£¬»ñÈ¡¸ùÏß³Ì×é
+            // éå†çº¿ç¨‹ç»„æ ‘ï¼Œè·å–æ ¹çº¿ç¨‹ç»„
             while (group != null) {
                 topGroup = group;
                 group = group.getParent();
             }
-            // ¼¤»îµÄÏß³ÌÊıÔÙ¼ÓÒ»±¶£¬·ÀÖ¹Ã¶¾ÙÊ±ÓĞ¿ÉÄÜ¸ÕºÃÓĞ¶¯Ì¬Ïß³ÌÉú³É
+            // æ¿€æ´»çš„çº¿ç¨‹æ•°å†åŠ ä¸€å€ï¼Œé˜²æ­¢æšä¸¾æ—¶æœ‰å¯èƒ½åˆšå¥½æœ‰åŠ¨æ€çº¿ç¨‹ç”Ÿæˆ
             int slackSize = topGroup.activeCount() * 2;
             Thread[] slackThreads = new Thread[slackSize];
-            // »ñÈ¡¸ùÏß³Ì×éÏÂµÄËùÓĞÏß³Ì£¬·µ»ØµÄactualSize±ãÊÇ×îÖÕµÄÏß³ÌÊı
+            // è·å–æ ¹çº¿ç¨‹ç»„ä¸‹çš„æ‰€æœ‰çº¿ç¨‹ï¼Œè¿”å›çš„actualSizeä¾¿æ˜¯æœ€ç»ˆçš„çº¿ç¨‹æ•°
             int actualSize = topGroup.enumerate(slackThreads);
             Thread[] atualThreads = new Thread[actualSize];
-            // ¸´ÖÆslackThreadsÖĞÓĞĞ§µÄÖµµ½atualThreads
+            // å¤åˆ¶slackThreadsä¸­æœ‰æ•ˆçš„å€¼åˆ°atualThreads
             System.arraycopy(slackThreads, 0, atualThreads, 0, actualSize);
             System.out.println("Threads size is " + atualThreads.length);
             for (Thread thread : atualThreads) {
@@ -63,8 +65,10 @@ public class LongClient {
 
     private static void connect() {
         try {
-            socket = new Socket(Config.LOCAL_ADDRESS, Config.PORT);
-            System.out.println("³É¹¦Á¬½Óµ½£º" + socket.getRemoteSocketAddress());
+            server_ip = Config.ADDRESS;
+            System.out.println(server_ip);
+            socket = new Socket(server_ip, Config.PORT);
+            System.out.println("æˆåŠŸè¿æ¥åˆ°ï¼š" + socket.getRemoteSocketAddress());
             connetionState = true;
             DataOutputStream dataOutputStream;
             DataInputStream dataInputStream;
@@ -82,25 +86,25 @@ public class LongClient {
         }
     }
 
-    public static void reConnect(){
-        while(!connetionState){
+    public static void reConnect() {
+        while (!connetionState) {
             System.out.println("Trying to reconnect.........");
             connect();
-            try{
+            try {
                 Thread.sleep(3000);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public static void stopTask(){
-        System.out.println("¹Ø±Õ·¢ËÍºÍ½ÓÊÕ½ø³Ì£»");
-        if(listen != null){
+    public static void stopTask() {
+        System.out.println("å…³é—­å‘é€å’Œæ¥æ”¶è¿›ç¨‹ï¼›");
+        if (listen != null) {
             listen.interrupt();
             listen = null;
         }
-        if(send != null){
+        if (send != null) {
             send.interrupt();
 //            System.out.print(sendTask.isInterrupted());
             send = null;
@@ -109,23 +113,24 @@ public class LongClient {
 }
 
 
-class ClientListen implements Runnable{
+class ClientListen implements Runnable {
     private Socket socket;
     private DataInputStream dataInputStream;
-    ClientListen(Socket socket, DataInputStream dataInputStream){
+
+    ClientListen(Socket socket, DataInputStream dataInputStream) {
         this.socket = socket;
         this.dataInputStream = dataInputStream;
     }
 
     public void run() {
         try {
-            while(LongClient.connetionState){
-                MessageProtocol receiver = (MessageProtocol)ProtocolUtil.readInputStream(dataInputStream);
-                System.out.println("»Ø¸´ÏûÏ¢£º");
+            while (LongClient.connetionState) {
+                MessageProtocol receiver = (MessageProtocol) ProtocolUtil.readInputStream(dataInputStream);
+                System.out.println("å›å¤æ¶ˆæ¯ï¼š");
                 System.out.println(receiver.getMessage());
                 LongClient.synchronize[0]--;
-                synchronized(LongClient.synchronize){
-                    if(LongClient.synchronize[0] == 0) {
+                synchronized (LongClient.synchronize) {
+                    if (LongClient.synchronize[0] == 0) {
                         System.out.println("free send thread....");
                         LongClient.synchronize.notifyAll();
                     }
@@ -134,13 +139,13 @@ class ClientListen implements Runnable{
             }
         } catch (IOException e) {
             e.printStackTrace();
-            try{
-                System.out.println("½ÓÊÕÏß³ÌÒì³£¡£");
+            try {
+                System.out.println("æ¥æ”¶çº¿ç¨‹å¼‚å¸¸ã€‚");
                 socket.close();
                 LongClient.stopTask();
                 LongClient.connetionState = false;
                 LongClient.reConnect();
-            } catch (Exception ee){
+            } catch (Exception ee) {
                 ee.printStackTrace();
             }
         } catch (Exception e) {
@@ -149,11 +154,11 @@ class ClientListen implements Runnable{
     }
 }
 
-class ClientSend implements Runnable{
+class ClientSend implements Runnable {
     private Socket socket;
     private DataOutputStream dataOutputStream;
 
-    ClientSend(Socket socket, DataOutputStream dataOutputStream){
+    ClientSend(Socket socket, DataOutputStream dataOutputStream) {
         this.socket = socket;
         this.dataOutputStream = dataOutputStream;
     }
@@ -163,14 +168,14 @@ class ClientSend implements Runnable{
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(System.in));
             String input;
-            System.out.println("ÇëÊäÈëÄãÏë·¢ËÍµÄÒì³££º");
-            while(!Thread.interrupted() && LongClient.connetionState){
+            System.out.println("è¯·è¾“å…¥ä½ æƒ³å‘é€çš„å¼‚å¸¸ï¼š");
+            while (!Thread.interrupted() && LongClient.connetionState) {
 
-                if (!br.ready()){
-                    try{
+                if (!br.ready()) {
+                    try {
                         Thread.sleep(1000);
                         continue;
-                    }catch (InterruptedException e) {
+                    } catch (InterruptedException e) {
                         System.out.println("send task get interrupt...");
                         if (!LongClient.connetionState)
                             socket.close();
@@ -182,40 +187,38 @@ class ClientSend implements Runnable{
 
                 AbnormalJson abmormalJson = new AbnormalJson(input);
 
-                if(abmormalJson.getMessage() != null){
+                if (abmormalJson.getMessage() != null) {
                     MessageProtocol sender = new MessageProtocol();
                     sender.setMessage(abmormalJson.getMessage());
                     System.out.println(abmormalJson.getMessage());
-                    System.out.println("the byte array sent:\n" +ProtocolUtil.byte2hex(sender.getData()));
+                    System.out.println("the byte array sent:\n" + ProtocolUtil.byte2hex(sender.getData()));
                     ProtocolUtil.writeOutputStream(sender, dataOutputStream);
-                }
-                else{
+                } else {
                     continue;
                 }
                 System.out.println(System.identityHashCode(LongClient.synchronize));
                 LongClient.synchronize[0] = 2;
                 System.out.println(System.identityHashCode(LongClient.synchronize));
 
-                synchronized (LongClient.synchronize){
-                    try{
+                synchronized (LongClient.synchronize) {
+                    try {
                         LongClient.synchronize.wait();
-                    }
-                    catch (InterruptedException e) {
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-                System.out.println("ÇëÊäÈëÄãÏë·¢ËÍµÄÒì³££º");
+                System.out.println("è¯·è¾“å…¥ä½ æƒ³å‘é€çš„å¼‚å¸¸ï¼š");
 
             }
         } catch (IOException e) {
             e.printStackTrace();
-            try{
-                System.out.println("·¢ËÍÏß³ÌÒì³£¡£");
+            try {
+                System.out.println("å‘é€çº¿ç¨‹å¼‚å¸¸ã€‚");
                 socket.close();
                 LongClient.stopTask();
                 LongClient.connetionState = false;
                 LongClient.reConnect();
-            } catch (Exception ee){
+            } catch (Exception ee) {
                 ee.printStackTrace();
             }
         }

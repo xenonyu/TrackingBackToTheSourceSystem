@@ -10,14 +10,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class LongServer implements Runnable {
     private static String[] string = {"You successfully transferred."};
 
-    //ÏûÏ¢¶ÓÁĞ
+    //æ¶ˆæ¯é˜Ÿåˆ—
     private volatile ConcurrentLinkedQueue<BasicProtocol> receiverData = new ConcurrentLinkedQueue<BasicProtocol>();
-    private volatile ConcurrentLinkedQueue<BasicProtocol> senderData= new ConcurrentLinkedQueue<BasicProtocol>();
-    private WriteTask writeTask;//Ğ´Êı¾İµÄÏß³Ì
-    private ReadTask readTask;//¶ÁÊı¾İµÄÏß³Ì
+    private volatile ConcurrentLinkedQueue<BasicProtocol> senderData = new ConcurrentLinkedQueue<BasicProtocol>();
+    private WriteTask writeTask;//å†™æ•°æ®çš„çº¿ç¨‹
+    private ReadTask readTask;//è¯»æ•°æ®çš„çº¿ç¨‹
     private Socket socket;
 
-    public LongServer(Socket socket){
+    public LongServer(Socket socket) {
         this.socket = socket;
     }
 
@@ -29,7 +29,7 @@ public class LongServer implements Runnable {
             writeTask = new WriteTask();
 
 
-            writeTask.outputStream = new DataOutputStream(socket.getOutputStream());//Ä¬ÈÏ³õÊ¼»¯·¢¸ø×Ô¼º
+            writeTask.outputStream = new DataOutputStream(socket.getOutputStream());//é»˜è®¤åˆå§‹åŒ–å‘ç»™è‡ªå·±
             readTask.inputStream = new DataInputStream(socket.getInputStream());
 
 
@@ -43,18 +43,19 @@ public class LongServer implements Runnable {
     }
 
     /**
-     * ¸ºÔğ¶ÁÈ¡Êı¾İ
+     * è´Ÿè´£è¯»å–æ•°æ®
      */
-    public class ReadTask extends Thread{
+    public class ReadTask extends Thread {
         private DataInputStream inputStream;
-        private boolean isCancle = false;//ÊÇ·ñÈ¡ÏûÑ­»·
+        private boolean isCancle = false;//æ˜¯å¦å–æ¶ˆå¾ªç¯
+
         @Override
         public void run() {
             try {
-                while (!isCancle){
+                while (!isCancle) {
                     BasicProtocol protocol = ProtocolUtil.readInputStream(inputStream);
-                    if(protocol != null){
-                        System.out.println("================:"+protocol.getMessage());
+                    if (protocol != null) {
+                        System.out.println("================:" + protocol.getMessage());
                         protocol.setMessage(string[0]);
                         senderData.add(protocol);
                     }
@@ -62,24 +63,25 @@ public class LongServer implements Runnable {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally{
-                stops();//²¶»ñµ½ioÒì³££¬¿ÉÄÜÔ­ÒòÊÇÁ¬½Ó¶Ï¿ªÁË£¬ËùÒÔÎÒÃÇÍ£µôËùÓĞ²Ù×÷
-                System.out.println("½ÓÊÕÏß³ÌÒì³££¬ÒÑ¶Ï¿ªÁ¬½Ó¡£");
+            } finally {
+                stops();//æ•è·åˆ°ioå¼‚å¸¸ï¼Œå¯èƒ½åŸå› æ˜¯è¿æ¥æ–­å¼€äº†ï¼Œæ‰€ä»¥æˆ‘ä»¬åœæ‰æ‰€æœ‰æ“ä½œ
+                System.out.println("æ¥æ”¶çº¿ç¨‹å¼‚å¸¸ï¼Œå·²æ–­å¼€è¿æ¥ã€‚");
             }
         }
     }
 
     /**
-     * ¸ºÔğĞ´ÈëÊı¾İ
+     * è´Ÿè´£å†™å…¥æ•°æ®
      */
-    public class WriteTask extends Thread{
+    public class WriteTask extends Thread {
         private DataOutputStream outputStream;
         private boolean isCancle = false;
-//        private Timer heart = new Timer();//·¢ËÍĞÄÌø°üµÄ¶¨Ê±ÈÎÎñ
-//        private Timer message = new Timer();//Ä£Äâ·¢ËÍÆÕÍ¨Êı¾İ
+
+        //        private Timer heart = new Timer();//å‘é€å¿ƒè·³åŒ…çš„å®šæ—¶ä»»åŠ¡
+//        private Timer message = new Timer();//æ¨¡æ‹Ÿå‘é€æ™®é€šæ•°æ®
         @Override
         public void run() {
-            //Ã¿¸ô20s·¢ËÍÒ»´ÎĞÄÌø°ü
+            //æ¯éš”20så‘é€ä¸€æ¬¡å¿ƒè·³åŒ…
 //            heart.schedule(new TimerTask() {
 //                @Override
 //                public void run() {
@@ -88,7 +90,7 @@ public class LongServer implements Runnable {
 //                }
 //            },0,1000*20);
 
-//            //ÏÈÑÓÊ±2s£¬È»ºóÃ¿¸ô6s·¢ËÍÒ»´ÎÆÕÍ¨Êı¾İ
+//            //å…ˆå»¶æ—¶2sï¼Œç„¶åæ¯éš”6så‘é€ä¸€æ¬¡æ™®é€šæ•°æ®
 //            final Random random = new Random();
 //            message.schedule(new TimerTask() {
 //                @Override
@@ -100,45 +102,47 @@ public class LongServer implements Runnable {
 //            },1000*2,1000*20);
 
             try {
-                while (!isCancle){
+                while (!isCancle) {
                     BasicProtocol bp = senderData.poll();
-                    if(bp!=null){
-                        System.out.println("------:"+bp.getMessage());
-                            ProtocolUtil.writeOutputStream(bp,outputStream);
-                        }
+                    if (bp != null) {
+                        System.out.println("------:" + bp.getMessage());
+                        ProtocolUtil.writeOutputStream(bp, outputStream);
                     }
-            }catch (IOException e) {
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
-            } finally{
-                System.out.println("·¢ËÍÏß³ÌÒì³££¬ ÒÑ¶Ï¿ªÁ¬½Ó¡£");
+            } finally {
+                System.out.println("å‘é€çº¿ç¨‹å¼‚å¸¸ï¼Œ å·²æ–­å¼€è¿æ¥ã€‚");
                 stopWrite();
             }
         }
     }
 
     /**
-     * Í£Ö¹µôËùÓĞ»î¶¯
+     * åœæ­¢æ‰æ‰€æœ‰æ´»åŠ¨
      */
-    public void stops(){
+    public void stops() {
         stopRead();
         stopWrite();
     }
-    public void stopRead(){
-        if (readTask!=null){
-            readTask.isCancle=true;
+
+    public void stopRead() {
+        if (readTask != null) {
+            readTask.isCancle = true;
             readTask.interrupt();
-            readTask=null;
+            readTask = null;
         }
     }
-    public void stopWrite(){
-        if (writeTask!=null) {
+
+    public void stopWrite() {
+        if (writeTask != null) {
             writeTask.isCancle = true;
-//            //È¡Ïû·¢ËÍĞÄÌø°üµÄ¶¨Ê±ÈÎÎñ
+//            //å–æ¶ˆå‘é€å¿ƒè·³åŒ…çš„å®šæ—¶ä»»åŠ¡
 //            writeTask.heart.cancel();
-            //È¡Ïû·¢ËÍÆÕÍ¨ÏûÏ¢µÄ¶¨Ê±ÈÎÎñ
+            //å–æ¶ˆå‘é€æ™®é€šæ¶ˆæ¯çš„å®šæ—¶ä»»åŠ¡
 //            writeTask.message.cancel();
             writeTask.interrupt();
-            writeTask=null;
+            writeTask = null;
         }
     }
 }

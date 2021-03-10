@@ -1,4 +1,5 @@
 package protocol;
+
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -9,16 +10,17 @@ public class ConnectionServer {
 
     private static boolean isStart = true;
     private static LongServer longServer;
-    public static void main(String[] args){
 
-        ServerSocket serverSocket=null;
-        ExecutorService executorService=Executors.newCachedThreadPool();
+    public static void main(String[] args) {
+
+        ServerSocket serverSocket = null;
+        ExecutorService executorService = Executors.newCachedThreadPool();
         try {
-            serverSocket=new ServerSocket(Config.PORT);
+            serverSocket = new ServerSocket(Config.PORT);
             while (isStart) {
                 Socket socket = serverSocket.accept();
-                String userIP=socket.getInetAddress().getHostAddress();
-                System.out.println("用户的IP地址为：" + userIP);
+                String userIP = socket.getInetAddress().getHostAddress();
+                System.out.println("鐢ㄦ埛鐨処P鍦板潃涓猴細" + userIP);
                 longServer = new LongServer(socket);
 
                 if (socket.isConnected()) {
@@ -28,12 +30,12 @@ public class ConnectionServer {
             serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            if (serverSocket!=null){
+        } finally {
+            if (serverSocket != null) {
                 try {
-                    isStart=false;
+                    isStart = false;
                     serverSocket.close();
-                    if(serverSocket!=null)
+                    if (serverSocket != null)
                         longServer.stops();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -43,4 +45,4 @@ public class ConnectionServer {
     }
 
 
-    }
+}

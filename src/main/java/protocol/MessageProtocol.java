@@ -3,7 +3,7 @@ package protocol;
 import java.io.*;
 
 /**
- * ÆÕÍ¨ÎÄ×ÖÏûÏ¢
+ * æ™®é€šæ–‡å­—æ¶ˆæ¯
  * Created by Extends on 2017/2/22.
  */
 public class MessageProtocol extends BasicProtocol {
@@ -18,23 +18,38 @@ public class MessageProtocol extends BasicProtocol {
     private String senderId = "1000000000000002";
     private String receiverId = "1000000000000001";
 
-    public void setMessage (String message) throws java.lang.NullPointerException{ this.jsonStr = message; setMessageLen(message.length() + BasicProtocol.HEADER_LEN);}
+    public void setMessage(String message) throws java.lang.NullPointerException {
+        this.jsonStr = message;
+        setMessageLen(message.length() + BasicProtocol.HEADER_LEN);
+    }
 
-    public void setMessageLen(int messageLen){ this.messageLen = messageLen; }
+    public void setMessageLen(int messageLen) {
+        this.messageLen = messageLen;
+    }
 
-    public void setVersion(int s){
+    public void setVersion(int s) {
         this.version = s;
     }
 
-    public void setSecureMode(int secureMode){this.secureMode = secureMode;}
+    public void setSecureMode(int secureMode) {
+        this.secureMode = secureMode;
+    }
 
-    public void setReserved(int reserved){this.reserved = reserved;}
+    public void setReserved(int reserved) {
+        this.reserved = reserved;
+    }
 
-    public void setMessageSerial(int messageSerial){this.messageSerial = messageSerial;}
+    public void setMessageSerial(int messageSerial) {
+        this.messageSerial = messageSerial;
+    }
 
-    public void setSenderId(String s){ this.senderId = s;}
+    public void setSenderId(String s) {
+        this.senderId = s;
+    }
 
-    public void setReceiverId(String s){ this.receiverId = s;}
+    public void setReceiverId(String s) {
+        this.receiverId = s;
+    }
 
     @Override
     public int getVersion() {

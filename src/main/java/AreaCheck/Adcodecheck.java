@@ -1,39 +1,41 @@
 package AreaCheck;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import Public.DB_Operation;
-//ÊµÏÖ»ùÓÚĞĞÕşÇø»®±àÂëµÄ²éÑ¯
+//å®ç°åŸºäºè¡Œæ”¿åŒºåˆ’ç¼–ç çš„æŸ¥è¯¢
 public class Adcodecheck {
 	public static String Input() {
-		//ÊäÈë·½·¨
+		//è¾“å…¥æ–¹æ³•
 		Scanner sc = new Scanner(System.in);
 		String result = sc.nextLine();
 		sc.close();
 		return result;
-
 	}
-	public static void areacheck(String adcode) throws SQLException {
-		//²éÑ¯ÇøÓòĞÅÏ¢
+	public static void areacheck(Connection conn, String adcode) throws SQLException {
+		//æŸ¥è¯¢åŒºåŸŸä¿¡æ¯
 		if(adcode.length()!=6) 
 			System.out.println("Input illegal!");
 		else{
-			String areaname = "areaname";
-			areaname = DB_Operation.Select("areaname", "adcodedatabase.adcodetable", "adcode", "'"+adcode+"'", areaname);
-			if(areaname==null) 
+			List<Map<String, Object>> areaname = DB_Operation.Select(conn, "areaname", "adcodedatabase.adcodetable", "adcode="+adcode);
+			if(areaname.isEmpty())
 				System.out.println("No data can be found!");
 			else {
 				System.out.println("The results are as follows:");
-				System.out.println("areaname:"+areaname);
+				System.out.println("areaname: " + areaname.get(0).get("areaname"));
 				System.out.println("The acquisition of data is successful!");
 			}		
 		}
 	}
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		DB_Operation.Connect("adcodedatabase");
+		Connection conn = DB_Operation.Connect("adcodedatabase");
 		System.out.println("Please input the 6bit administrative division code:");
 		String adcode = Input();
 		//long startTime = System.currentTimeMillis();
-		areacheck(adcode);
+		areacheck(conn, adcode);
 		//long endTime = System.currentTimeMillis();
 		//System.out.println("The time costs:"+(endTime - startTime)+"ms");
 		DB_Operation.Close();

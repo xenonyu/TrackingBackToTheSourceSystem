@@ -5,9 +5,8 @@ package protocol;
  */
 public class Config {
 
-    public static final int VERSION = 1;                 //Ğ­Òé°æ±¾ºÅ
-    public static final String ADDRESS = "124.127.47.85"; //·şÎñÆ÷µØÖ·
-    public static final String LOCAL_ADDRESS = "127.0.0.1";
-    public static final int PORT = 13001;                 //·şÎñÆ÷¶Ë¿ÚºÅ
-
+    public static final int VERSION = 1;                 //åè®®ç‰ˆæœ¬å·
+    public static final String ADDRESS = "159.226.95.115"; //æœåŠ¡å™¨åœ°å€
+    public static final String LOCAL_ADDRESS = "localhost";
+    public static final int PORT = 14202;                 //æœåŠ¡å™¨ç«¯å£å·
 }

@@ -1,20 +1,24 @@
 package AreaCheck;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import Public.DB_Operation;
-//ÊµÏÖ»ùÓÚIPµØÖ·µÄ²éÑ¯
+//å®ç°åŸºäºIPåœ°å€çš„æŸ¥è¯¢
 public class IPcheck {
 	public static String Input() {
-		//ÊäÈë·½·¨
+		//è¾“å…¥æ–¹æ³•
 		Scanner sc = new Scanner(System.in);
 		String result = sc.nextLine();
 		sc.close();
 		return result;
 	}
 	public static int iptranslate(String strip) {
-		//ÊµÏÖIPµØÖ·µã·Öµ½ÕûÊıµÄ×ª»»
+		//å®ç°IPåœ°å€ç‚¹åˆ†åˆ°æ•´æ•°çš„è½¬æ¢
 		if(strip == null) return -1;
-		String regex = 
+		String regex =
 			"((\\d)|(\\d\\d)|(1\\d\\d)|(2[0-4]\\d)|(25[0-5]))"+"\\."
 			+"((\\d)|(\\d\\d)|(1\\d\\d)|(2[0-4]\\d)|(25[0-5]))"+"\\."
 			+"((\\d)|(\\d\\d)|(1\\d\\d)|(2[0-4]\\d)|(25[0-5]))"+"\\."
@@ -31,28 +35,24 @@ public class IPcheck {
 			return intip;
 		}
 	}
-	public static String tablecheck(int intip) throws SQLException {
-		//²éÑ¯Ä¿±êIPµØÖ·µÄËùÔÚ±í
-		String tableid = DB_Operation.Select("tableid", "ipdatabase.tableindex", intip+" BETWEEN minip AND maxip", "tableid");
-		if(tableid.length()==1) tableid = "000"+tableid;
-		else if(tableid.length()==2) tableid = "00"+tableid;
-		else if(tableid.length()==3) tableid = "0"+tableid;
-		return tableid;
+	public static String tablecheck(Connection conn, int intip) throws SQLException {
+		//æŸ¥è¯¢ç›®æ ‡IPåœ°å€çš„æ‰€åœ¨è¡¨
+		List<Map<String, Object>> information = DB_Operation.Select(conn, "tableid", "tableindex", intip+" BETWEEN minip AND maxip");
+		Integer tableid = Integer.parseInt(information.get(0).get("tableid").toString());
+		DecimalFormat df = new DecimalFormat("0000");
+		return df.format(tableid);
 	}
 	//
-	public static String[] informationcheck(String tableid, int intip) throws SQLException {
-		//²éÑ¯Ä¿±ê±íÖĞµÄIPµØÖ·ĞÅÏ¢
-		String []information = new String[4];
-		information[0] = "continent";
-		information[1] = "country";
-		information[2] = "multiarea";
-		information[3] = "user";
-		information = DB_Operation.Select("*", "table"+tableid, String.valueOf(intip)+" BETWEEN minip AND maxip LIMIT 1", information, 4);
-		information[2] = chartran(information[2]);
+	public static List<Map<String, Object>> informationcheck(Connection conn, String tableid, int intip) throws SQLException {
+		//æŸ¥è¯¢ç›®æ ‡è¡¨ä¸­çš„IPåœ°å€ä¿¡æ¯
+		List<Map<String, Object>> information;
+		information = DB_Operation.Select(conn, "*", "table"+tableid, intip+" BETWEEN minip AND maxip");
+		if (information.get(0).get("multiarea") != null)
+			information.get(0).put((String) information.get(0).get("multiarea"), chartran((String) information.get(0).get("multiarea")));
 		return information;
 	}
 	public static String chartran(String str) {
-		//multiareaÖĞµÄ×ªÒå×Ö·û´¦Àí
+		//multiareaä¸­çš„è½¬ä¹‰å­—ç¬¦å¤„ç†
 		int index = str.indexOf("'");
     	StringBuffer sb = new StringBuffer();
         while (index!=-1) {
@@ -62,17 +62,16 @@ public class IPcheck {
 		return str;
 	}
 	public static String IPcheckmain(String strip) throws ClassNotFoundException, SQLException {
-		//IPµØÖ·²éÑ¯Ö÷·½·¨
-		DB_Operation.Connect("ipdatabase");
+		//IPåœ°å€æŸ¥è¯¢ä¸»æ–¹æ³•
+		Connection conn = DB_Operation.Connect("ipdatabase");
 		int intip = iptranslate(strip);
-		if(intip == -1) 
+		if(intip == -1)
 			return null;
 		else {
-			String tableid = tablecheck(intip);
-			String[]information = informationcheck(tableid, intip);
-			String Areamessage = "continent:"+information[0]+" country:"+information[1]
-					+" multiarea:"+information[2]+" user:"+information[3];
-			return Areamessage;
+			String tableid = tablecheck(conn, intip);
+			List<Map<String, Object>> information = informationcheck(conn, tableid, intip);
+			return "continent:"+information.get(0).get("continent")+" country:"+information.get(0).get("country")
+					+" multiarea:"+information.get(0).get("multiarea")+" user:"+information.get(0).get("user");
 		}
 	}
 }

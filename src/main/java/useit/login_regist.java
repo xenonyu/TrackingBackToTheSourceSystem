@@ -1,68 +1,72 @@
 package useit;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import Public.DB_Operation;
 
 public class login_regist {
-	public static String Input(int closesc) {
-		Scanner sc = new Scanner(System.in);
-		String result = sc.nextLine();
-		if(closesc == 1) sc.close();
-		return result;
-	}
-	public static void regist() throws SQLException {
-		System.out.println("ÇëÊäÈëÄúÒª×¢²áµÄÓÃ»§Ãû£º");
-		String user = Input(0);
-		String checkuser = DB_Operation.Select("user","registmessage","user","'"+user+"'","user");
-		if(checkuser != null) {
-			System.out.println("ÓÃ»§ÃûÒÑ´æÔÚ£¡");
-			System.out.println("×¢²áÊ§°Ü£¡");
-			Journal.write(user, "³¢ÊÔ×¢²áÊ§°Ü");
-		}
-		else {
-			System.out.println("ÇëÊäÈëÄúÒª×¢²áµÄÃÜÂë£º");
-			String password = Input(0);
-			String []Columnname = new String[2];
-			String []value = new String[2];
-			Columnname[0] = "user";
-			Columnname[1] = "password";
-			value[0] = user;
-			value[1] = password;
-			if(DB_Operation.Insert("registmessage",Columnname,2,value)) {
-				System.out.println("×¢²á³É¹¦£¡");
-				Journal.write(user, "³¢ÊÔ×¢²á³É¹¦");
-			}
-			else{
-				System.out.println("×¢²áÊ§°Ü£¡");
-				Journal.write(user, "³¢ÊÔ×¢²áÊ§°Ü");
-			}
-		}
-	}
-	public static String login() throws SQLException {
-		System.out.println("ÇëÊäÈëÄúµÄÓÃ»§Ãû£º");
-		String user = Input(0);
-		String checkuser = DB_Operation.Select("user","registmessage","user","'"+user+"'","user");
-		if(checkuser == null) {
-			System.out.println("ÓÃ»§Ãû²»´æÔÚ£¡");
-			System.out.println("µÇÂ¼Ê§°Ü£¡");
-			return null;
-		}
-		else {
-			System.out.println("ÇëÊäÈëÄúµÄÃÜÂë£º");
-			String password = Input(0);
-			String checkpassword = DB_Operation.Select("password","registmessage","user","'"+user+"'","password");
-			if(password.equals(checkpassword)) {
-				System.out.println("ÃÜÂëÕıÈ·£¬µÇÂ¼³É¹¦£¡");
-				Journal.write(user, "³¢ÊÔµÇÂ¼³É¹¦");
-				return user;
-			}
-			else {
-				System.out.println("ÃÜÂë´íÎó£¬µÇÂ¼Ê§°Ü£¡");
-				Journal.write(user, "³¢ÊÔµÇÂ¼Ê§°Ü");
-				return user;
-			}
-		}
-	}
+    public static String Input(int closesc) {
+        Scanner sc = new Scanner(System.in);
+        String result = sc.nextLine();
+        if (closesc == 1) sc.close();
+        return result;
+    }
+
+    public static void regist() throws SQLException, ClassNotFoundException {
+        Connection conn = DB_Operation.Connect("registmessage");
+        System.out.println("è¯·è¾“å…¥æ‚¨è¦æ³¨å†Œçš„ç”¨æˆ·åï¼š");
+        String user = Input(0);
+        List<Map<String, Object>> checkuser = DB_Operation.Select(conn,"user", "registmessage", "user="+user);
+        if (!checkuser.isEmpty()) {
+            System.out.println("ç”¨æˆ·åå·²å­˜åœ¨ï¼");
+            System.out.println("æ³¨å†Œå¤±è´¥ï¼");
+            Journal.write(user, "å°è¯•æ³¨å†Œå¤±è´¥");
+        } else {
+            System.out.println("è¯·è¾“å…¥æ‚¨è¦æ³¨å†Œçš„å¯†ç ï¼š");
+            String password = Input(0);
+            String[] Columnname = new String[2];
+            Map<String, Object> value = new HashMap<String, Object>();
+            Columnname[0] = "user";
+            Columnname[1] = "password";
+            value.put("user", user);
+            value.put("password", password);
+            if (DB_Operation.Insert(conn, "registmessage", Columnname, value)) {
+                System.out.println("æ³¨å†ŒæˆåŠŸï¼");
+                Journal.write(user, "å°è¯•æ³¨å†ŒæˆåŠŸ");
+            } else {
+                System.out.println("æ³¨å†Œå¤±è´¥ï¼");
+                Journal.write(user, "å°è¯•æ³¨å†Œå¤±è´¥");
+            }
+        }
+    }
+
+    public static String login() throws SQLException, ClassNotFoundException {
+        Connection conn = DB_Operation.Connect("registmessage");
+        System.out.println("è¯·è¾“å…¥æ‚¨çš„ç”¨æˆ·åï¼š");
+        String user = Input(0);
+        List<Map<String, Object>> checkuser = DB_Operation.Select(conn,"user", "registmessage", "user="+user);
+        if (!checkuser.isEmpty()) {
+            System.out.println("ç”¨æˆ·åä¸å­˜åœ¨ï¼");
+            System.out.println("ç™»å½•å¤±è´¥ï¼");
+            return null;
+        } else {
+            System.out.println("è¯·è¾“å…¥æ‚¨çš„å¯†ç ï¼š");
+            String password = Input(0);
+            List<Map<String, Object>> checkpassword = DB_Operation.Select(conn, "password", "registmessage", "user=" +user);
+            if (password.equals(checkpassword.get(0).get("password"))) {
+                System.out.println("å¯†ç æ­£ç¡®ï¼Œç™»å½•æˆåŠŸï¼");
+                Journal.write(user, "å°è¯•ç™»å½•æˆåŠŸ");
+                return user;
+            } else {
+                System.out.println("å¯†ç é”™è¯¯ï¼Œç™»å½•å¤±è´¥ï¼");
+                Journal.write(user, "å°è¯•ç™»å½•å¤±è´¥");
+                return user;
+            }
+        }
+    }
 }

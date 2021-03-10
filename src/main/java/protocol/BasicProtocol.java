@@ -14,21 +14,22 @@ public abstract class BasicProtocol {
     static final int HEADER_LEN = 48;
 
     /**
-     * »ñÈ¡°ü×°ºÃµÄbyte[]
+     * è·å–åŒ…è£…å¥½çš„byte[]
+     *
      * @return byte[]
      */
     public byte[] getData() {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            baos.write((byte)(getVersion()));
+            baos.write((byte) (getVersion()));
             baos.write(ProtocolUtil.int2ByteArrays(getSecureMode()), 0, SECURE_MODE_LEN);
             baos.write(ProtocolUtil.int2ByteArrays(getReserved()), 0, RESERVED_LEN);
             baos.write(ProtocolUtil.int2ByteArrays(getMessageSerial()), 0, MESSAGE_SERIAL_LEN);
             baos.write(ProtocolUtil.int2ByteArrays(getMessageLen()), 0, MESSAGE_LEN_LEN);
-            baos.write(ProtocolUtil.int2ByteArrays(getType()),0,MESSAGE_TYPE_LEN);
+            baos.write(ProtocolUtil.int2ByteArrays(getType()), 0, MESSAGE_TYPE_LEN);
             baos.write(ProtocolUtil.str2ByteArrays(getSenderId()), 0, SENDER_ID_LEN);
             baos.write(ProtocolUtil.str2ByteArrays(getReceiverId()), 0, RECEIVER_ID_LEN);
-            baos.write(ProtocolUtil.str2ByteArrays(getMessage(), getMessage().length()), 0, getMessageLen()-HEADER_LEN);
+            baos.write(ProtocolUtil.str2ByteArrays(getMessage(), getMessage().length()), 0, getMessageLen() - HEADER_LEN);
 //            System.out.println(baos.toByteArray().length);
 
 //            baos.write(ProtocolUtil.int2ByteArrays(getSecureMode()), 0, SECURE_MODE_LEN);
@@ -41,69 +42,80 @@ public abstract class BasicProtocol {
 //            baos.write(ProtocolUtil.str2ByteArrays(getMessage(), getMessage().length()), 0, getMessageLen()-HEADER_LEN);
 //            baos.write(ProtocolUtil.str2ByteArrays("11111111"), 0, 16);
             return baos.toByteArray();
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.print("Exception occurred\n");
             return null;
         }
     }
+
     /**
-     * »ñÈ¡°æ±¾ºÅ
+     * è·å–ç‰ˆæœ¬å·
+     *
      * @return
      */
     public abstract int getVersion();
 
     /**
-     * »ñÈ¡°²È«Ä£Ê½
+     * è·å–å®‰å…¨æ¨¡å¼
+     *
      * @return
      */
-    public abstract  int getSecureMode();
+    public abstract int getSecureMode();
 
     /**
-     * »ñÈ¡°²È«Ä£Ê½
+     * è·å–å®‰å…¨æ¨¡å¼
+     *
      * @return
      */
-    public abstract  int getReserved();
+    public abstract int getReserved();
 
     /**
-     * »ñÈ¡ÏûÏ¢ĞòºÅ
+     * è·å–æ¶ˆæ¯åºå·
+     *
      * @return
      */
-    public abstract  int getMessageSerial();
+    public abstract int getMessageSerial();
 
     /**
-     * »ñÈ¡ĞÅÏ¢³¤¶È
+     * è·å–ä¿¡æ¯é•¿åº¦
+     *
      * @return
      */
 
-    public abstract  int getMessageLen();
+    public abstract int getMessageLen();
 
 
     /**
-     * »ñÈ¡ÒµÎñÀàĞÍ
+     * è·å–ä¸šåŠ¡ç±»å‹
+     *
      * @return
      */
-    public abstract  int getType();
+    public abstract int getType();
 
     /**
-     * »ñÈ¡·¢ËÍID
+     * è·å–å‘é€ID
+     *
      * @return
      */
-    public abstract  String getSenderId();
+    public abstract String getSenderId();
 
     /**
-     * »ñÈ¡½ÓÊÜID
+     * è·å–æ¥å—ID
+     *
      * @return
      */
-    public abstract  String getReceiverId();
+    public abstract String getReceiverId();
 
     /**
-     * »ñÈ¡ĞÅÏ¢
+     * è·å–ä¿¡æ¯
+     *
      * @return
      */
-    public abstract  String getMessage();
+    public abstract String getMessage();
 
     /**
-     * ½âÎöÊı¾İ
+     * è§£ææ•°æ®
+     *
      * @param bytes
      */
     public abstract void parseBinary(byte[] bytes);

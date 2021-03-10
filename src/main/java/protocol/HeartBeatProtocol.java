@@ -1,14 +1,14 @@
 package protocol;
 
 /**
- * ĞÄÌø°ü
+ * å¿ƒè·³åŒ…
  * Created by Extends on 2017/2/22.
  */
-public class HeartBeatProtocol{
+public class HeartBeatProtocol {
 //    static final String TYPE = "0000";
 //    @Override
 //    public String getContext() {
-//        return "ĞÖµÜ£¬ÎÒ»¹ÔÚ£¬Äã²»Òªµ£ĞÄ";
+//        return "å…„å¼Ÿï¼Œæˆ‘è¿˜åœ¨ï¼Œä½ ä¸è¦æ‹…å¿ƒ";
 //    }
 //
 //    @Override

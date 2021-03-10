@@ -1,53 +1,51 @@
 package Individual_judge;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
 import Public.DB_Operation;
 
 public class Individual_judge_main {
-	public static boolean Deal_inputdata()throws SQLException, ClassNotFoundException {
-		//´ÓÊı¾İ¿âinputdataÖĞÌáÈ¡Òì³£ÊÂ¼şÊı¾İ£¬Ö´ĞĞ¶¨Î»ºóÊä³öµ½±¾µØÒì³£ÊÂ¼şÊı¾İ¿âÖĞ
-		String[]result = new String[2];
-		String[][]information = new String[100][2];
-		result[0] = "eventID";
-		result[1] = "eventType";
-		information = DB_Operation.SelectMore("*", "inputdata.abjudge", result, 2);
-		for(int i=0; i<100; i++) {
-			if(information[0][0]==null) return false;
-			else if(information[i][0]==null) break;
-			String EventID = information[i][0];
-			int EventType = Integer.valueOf(information[i][1]);
-			if(Check_EventID_From_judgetable(EventID)==1) {
-				if(EventType==0) {
-					if(!Modify_judgeby_EventType.Update_Type0(EventID)) return false;
-				}
-				else if(EventType==1) {
-					if(!Modify_judgeby_EventType.Update_Type1(EventID)) return false;
-				}
-				else return false;
-			}
-			else {
-				if(EventType==0) {
-					if(!Modify_judgeby_EventType.Insert_Type0(EventID)) return false;
-				}
-				else if(EventType==1) {
-					if(!Modify_judgeby_EventType.Insert_Type1(EventID)) return false;
-				}
-				else return false;
-			}
-		}
-		return true;
-	}
-	public static int Check_EventID_From_judgetable(String EventID) throws SQLException {
-		//´ÓÒì³£ÊÂ¼ş±íÖĞ²éÕÒÊÇ·ñÒÑ´æÔÚÒì³£ÊÂ¼şID£¨·ÀÖ¹Ö÷¼ü³åÍ»£¬ÏàÍ¬Ôò¸üĞÂ£¬²»´æÔÚÔò´´½¨£©
-		String result = DB_Operation.Select("eventID", "abjudge.judgetable", "eventID", "'"+EventID+"'", "eventID");
-		if(result!=null) return 1;
-		else return 0;
-	}
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		DB_Operation.Connect("inputdata");
-		DB_Operation.Connect("abjudge");
-		if(Deal_inputdata()) System.out.println("Successful!");
-		else System.out.println("falied!");
-		DB_Operation.Close();
-	}
+    public static boolean Deal_inputdata(Connection inputDB) throws SQLException, ClassNotFoundException {
+        //ä»æ•°æ®åº“inputdataä¸­æå–å¼‚å¸¸äº‹ä»¶æ•°æ®ï¼Œæ‰§è¡Œå®šä½åè¾“å‡ºåˆ°æœ¬åœ°å¼‚å¸¸äº‹ä»¶æ•°æ®åº“ä¸­
+//        result[0] = "eventID";
+//        result[1] = "eventType";
+        List<Map<String, Object>> information = DB_Operation.Select(inputDB, "*", "fwqfm", "id>=0");
+        for (int i = 0; i < information.size(); i++) {
+            if (information.get(i).get("eventID") == null) return false;
+            else if (information.get(i).get("eventID") == null) break;
+            String EventID = information.get(i).get("eventID").toString();
+            int EventType = Integer.parseInt(information.get(i).get("eventType").toString());
+            if (Check_EventID_From_judgetable(inputDB, EventID)) {
+                if (EventType == 0) {
+                    if (!Modify_judgeby_EventType.Update_Type0(inputDB, EventID)) return false;
+                } else if (EventType == 1) {
+                    if (!Modify_judgeby_EventType.Update_Type1(inputDB, EventID)) return false;
+                } else return false;
+            } else {
+                if (EventType == 0) {
+                    if (!Modify_judgeby_EventType.Insert_Type0(inputDB, EventID)) return false;
+                } else if (EventType == 1) {
+                    if (!Modify_judgeby_EventType.Insert_Type1(inputDB, EventID)) return false;
+                } else return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean Check_EventID_From_judgetable(Connection conn, String EventID) throws SQLException {
+        //ä»å¼‚å¸¸äº‹ä»¶è¡¨ä¸­æŸ¥æ‰¾æ˜¯å¦å·²å­˜åœ¨å¼‚å¸¸äº‹ä»¶IDï¼ˆé˜²æ­¢ä¸»é”®å†²çªï¼Œç›¸åŒåˆ™æ›´æ–°ï¼Œä¸å­˜åœ¨åˆ™åˆ›å»ºï¼‰
+        List<Map<String,Object>> result = DB_Operation.Select(conn, "eventID", "abjudge.judgetable", "eventID="+ EventID);
+        return result.isEmpty();
+    }
+
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        Connection inputDataConn = DB_Operation.Connect("dzpj_aqts_202000628");
+        Connection abjudge = DB_Operation.Connect("abjudge");
+        if (Deal_inputdata(inputDataConn)) System.out.println("Successful!");
+        else System.out.println("falied!");
+        DB_Operation.Close();
+    }
 }

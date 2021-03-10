@@ -1,226 +1,265 @@
 package path_localize;
+
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import AreaCheck.IPcheck;
 import Public.DB_Operation;
-//攻击路径定位接口
+import abnormal_process.AbnormalJson;
+
+//鏀诲嚮璺緞瀹氫綅鎺ュ彛
 public class path_localize_main {
-	public static boolean Deal_inputdata()throws SQLException, ClassNotFoundException {
-		//从数据库inputdata中提取异常行为数据，执行定位后输出到本地异常行为数据库中
-		String[]result = new String[2];
-		String[][]information = new String[100][2];
-		result[0] = "abBehaviorID";
-		result[1] = "eventCode";
-		information = DB_Operation.SelectMore("*", "inputdata.abbehavior", result, 2);
-		for(int i=0; i<100; i++) {
-			if(information[0][0]==null) return false;
-			else if(information[i][0]==null) break;
-			String AbBehaviorID = information[i][0];
-			int EventCode = Integer.valueOf(information[i][1]);
-			if((EventCode==2)||(EventCode>=9)&&(EventCode<=12)||(EventCode>=15)) {
-				if(Check_AbBehaviorID_From_authabtable(AbBehaviorID)==1) {
-					switch(EventCode) {
-					case 2:{
-						if(!Update_judgeby_abtype.AbBehavior_Type02(AbBehaviorID)) return false;
-						break;
-					}
-					case 9:{
-						if(!Update_judgeby_abtype.AbBehavior_Type09(AbBehaviorID)) return false;
-						break;
-					}
-					case 10:{
-						if(!Update_judgeby_abtype.AbBehavior_Type10(AbBehaviorID)) return false;
-						break;
-					}
-					case 11:{
-						if(!Update_judgeby_abtype.AbBehavior_Type11(AbBehaviorID)) return false;
-						break;
-					}
-					case 12:{
-						if(!Update_judgeby_abtype.AbBehavior_Type12(AbBehaviorID)) return false;
-						break;
-					}
-					case 15:{
-						if(!Update_judgeby_abtype.AbBehavior_Type15(AbBehaviorID)) return false;
-						break;
-					}
-					case 16:{
-						if(!Update_judgeby_abtype.AbBehavior_Type16(AbBehaviorID)) return false;
-						break;
-					}
-					case 17:{
-						if(!Update_judgeby_abtype.AbBehavior_Type17(AbBehaviorID)) return false;
-						break;
-					}
-					default: return false;
-					}
-				}
-				else {
-					switch(EventCode) {
-					case 2:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type02(AbBehaviorID)) return false;
-						break;
-					}
-					case 9:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type09(AbBehaviorID)) return false;
-						break;
-					}
-					case 10:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type10(AbBehaviorID)) return false;
-						break;
-					}
-					case 11:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type11(AbBehaviorID)) return false;
-						break;
-					}
-					case 12:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type12(AbBehaviorID)) return false;
-						break;
-					}
-					case 15:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type15(AbBehaviorID)) return false;
-						break;
-					}
-					case 16:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type16(AbBehaviorID)) return false;
-						break;
-					}
-					case 17:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type17(AbBehaviorID)) return false;
-						break;
-					}
-					default: return false;
-					}
-				}
-			}
-			else if((EventCode==0)||(EventCode==1)||(EventCode==4)) {
-				if(Check_AbBehaviorID_From_servabtable(AbBehaviorID)==1) {	
-					switch(EventCode) {
-					case 0:{
-						if(!Update_judgeby_abtype.AbBehavior_Type00(AbBehaviorID)) return false;
-						break;
-					}
-					case 1:{
-						if(!Update_judgeby_abtype.AbBehavior_Type01(AbBehaviorID)) return false;
-						break;
-					}
-					case 4:{
-						if(!Update_judgeby_abtype.AbBehavior_Type04(AbBehaviorID)) return false;
-						break;
-					}
-					default: return false;
-					}
-				}
-				else {
-					switch(EventCode) {
-					case 0:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type00(AbBehaviorID)) return false;
-						break;
-					}
-					case 1:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type01(AbBehaviorID)) return false;
-						break;
-					}
-					case 4:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type04(AbBehaviorID)) return false;
-						break;
-					}
-					default: return false;
-					}
-				}
-			}
-			else {
-				if(Check_AbBehaviorID_From_credabtable(AbBehaviorID)==1) {	
-					switch(EventCode) {
-					case 3:{
-						if(!Update_judgeby_abtype.AbBehavior_Type03(AbBehaviorID)) return false;
-						break;
-					}
-					case 5:{
-						if(!Update_judgeby_abtype.AbBehavior_Type05(AbBehaviorID)) return false;
-						break;
-					}
-					case 6:{
-						if(!Update_judgeby_abtype.AbBehavior_Type06(AbBehaviorID)) return false;
-						break;
-					}
-					case 7:{
-						if(!Update_judgeby_abtype.AbBehavior_Type07(AbBehaviorID)) return false;
-						break;
-					}
-					case 8:{
-						if(!Update_judgeby_abtype.AbBehavior_Type08(AbBehaviorID)) return false;
-						break;
-					}
-					case 13:{
-						if(!Update_judgeby_abtype.AbBehavior_Type13(AbBehaviorID)) return false;
-						break;
-					}
-					case 14:{
-						if(!Update_judgeby_abtype.AbBehavior_Type14(AbBehaviorID)) return false;
-						break;
-					}
-					default: return false;
-					}
-				}
-				else {
-					switch(EventCode) {
-					case 3:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type03(AbBehaviorID)) return false;
-						break;
-					}
-					case 5:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type05(AbBehaviorID)) return false;
-						break;
-					}
-					case 6:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type06(AbBehaviorID)) return false;
-						break;
-					}
-					case 7:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type07(AbBehaviorID)) return false;
-						break;
-					}
-					case 8:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type08(AbBehaviorID)) return false;
-						break;
-					}
-					case 13:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type13(AbBehaviorID)) return false;
-						break;
-					}
-					case 14:{
-						if(!Insert_judgeby_abtype.AbBehavior_Type14(AbBehaviorID)) return false;
-						break;
-					}
-					default: return false;
-					}
-				}
-			}
-		}
-		return true;
-	}
-	public static int Check_AbBehaviorID_From_authabtable(String AbBehaviorID) throws SQLException {
-		//从认证异常表中查找是否已存在异常行为ID（防止主键冲突，相同则更新，不存在则创建）
-		String result = DB_Operation.Select("abBehaviorID", "abbehavior.authabtable", "abBehaviorID", "'"+AbBehaviorID+"'", "abBehaviorID");
-		if(result!=null) return 1;
-		else return 0;
-	}
-	public static int Check_AbBehaviorID_From_servabtable(String AbBehaviorID) throws SQLException {
-		//从服务器异常表中查找是否已存在异常行为ID（防止主键冲突，相同则更新，不存在则创建）
-		String result = DB_Operation.Select("abBehaviorID", "abbehavior.servabtable", "abBehaviorID", "'"+AbBehaviorID+"'", "abBehaviorID");
-		if(result!=null) return 1;
-		else return 0;
-	}
-	public static int Check_AbBehaviorID_From_credabtable(String AbBehaviorID) throws SQLException {
-		//从凭据异常表中查找是否已存在异常行为ID（防止主键冲突，相同则更新，不存在则创建）
-		String result = DB_Operation.Select("abBehaviorID", "abbehavior.credabtable", "abBehaviorID", "'"+AbBehaviorID+"'", "abBehaviorID");
-		if(result!=null) return 1;
-		else return 0;
-	}
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		DB_Operation.Connect("inputdata");
-		DB_Operation.Connect("abbehavior");
-		if(Deal_inputdata()) System.out.println("Successful!");
-		else System.out.println("falied!");
-		DB_Operation.Close();
-	}
+    private static final Map<String, Integer> threatTypeArray = new HashMap<>();
+    static {
+        threatTypeArray.put("dccskl", 0x01);
+        threatTypeArray.put("dczsrzsb", 0x02);
+        threatTypeArray.put("jfpbx", 0x03);
+        threatTypeArray.put("jxtlj", 0x04);
+        threatTypeArray.put("cfzfchbx", 0x05);
+        threatTypeArray.put("ycsjkjde", 0x06);
+        threatTypeArray.put("ycsjkjdl", 0x07);
+        threatTypeArray.put("dsjkqykjdlde", 0x08);
+        threatTypeArray.put("yhtypjdchzsb", 0x09);
+        threatTypeArray.put("yhbtpjdchzsb", 0x0A);
+        threatTypeArray.put("yhdccsrzsb", 0x0B);
+        threatTypeArray.put("yhpfbgpjzt", 0x0C);
+        threatTypeArray.put("dsjkjdl", 0x0D);
+        threatTypeArray.put("dsjkjdlde", 0x0E);
+        threatTypeArray.put("dccyjfp", 0x0F);
+        threatTypeArray.put("xtdccsrzsb", 0x10);
+        threatTypeArray.put("pjpfbgzt", 0x11);
+    }
+    private static final Map<String, Integer> mapType = new HashMap<>();
+    static {
+        mapType.put("0x01", 0x01);
+        mapType.put("0x02", 0x02);
+        mapType.put("0x03", 0x03);
+        mapType.put("0x04", 0x04);
+        mapType.put("0x05", 0x05);
+        mapType.put("0x06", 0x06);
+        mapType.put("0x07", 0x07);
+        mapType.put("0x08", 0x08);
+        mapType.put("0x09", 0x09);
+        mapType.put("0x0A", 0x0A);
+        mapType.put("0x0B", 0x0B);
+        mapType.put("0x0C", 0x0C);
+        mapType.put("0x0D", 0x0D);
+        mapType.put("0x0E", 0x0E);
+        mapType.put("0x0F", 0x0F);
+        mapType.put("0x10", 0x10);
+        mapType.put("0x11", 0x11);
+    }
+    public static <K,V> HashMap<V,K> reverse(Map<K,V> map) {
+        HashMap<V,K> rev = new HashMap<>();
+        for(Map.Entry<K,V> entry : map.entrySet())
+            rev.put(entry.getValue(), entry.getKey());
+        return rev;
+    }
+    static Map<Integer, String> swapped;
+    public path_localize_main(){
+        swapped = reverse(threatTypeArray);
+    }
+    public static boolean Deal_inputdata(Connection conn) throws SQLException, ClassNotFoundException {
+        List<Map<String, Object>> information;
+        information = DB_Operation.Select(conn, "*", "dccskl", "id>=0");
+        for (Map<String, Object> stringObjectMap : information) {
+            if (stringObjectMap.get("id") == null) return false;
+            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+            AbnormalJson abJson = new AbnormalJson();
+            abJson.setThreatType(
+                    mapType.get(stringObjectMap.get("eventCode"))
+            );
+            abJson.setOriginID((Integer) stringObjectMap.get("id"));
+            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+            abJson.setThreatUserID((String) stringObjectMap.get("userID"));
+            abJson.setThreatEnterpriseID("");
+            abJson.setThreatCredenID("");
+            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+            abJson.setThreatedIP("");
+            if (!DB_Operation.Insert(conn, abJson)) return false;
+        }
+        information = DB_Operation.Select(conn, "*", "dczsrzsb", "id>=0");
+        for (Map<String, Object> stringObjectMap : information) {
+            if (stringObjectMap.get("id") == null) return false;
+            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+            AbnormalJson abJson = new AbnormalJson();
+            abJson.setThreatType(
+                    mapType.get(stringObjectMap.get("eventCode"))
+            );
+            abJson.setOriginID((Integer) stringObjectMap.get("id"));
+            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+            abJson.setThreatUserID((String) stringObjectMap.get("authCertiUserID"));
+            abJson.setThreatEnterpriseID((String) stringObjectMap.get("authCertiSysID"));
+            abJson.setThreatCredenID("");
+            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+            abJson.setThreatedIP("");
+            if (!DB_Operation.Insert(conn, abJson)) return false;
+        }
+        information = DB_Operation.Select(conn, "*", "jfpbx", "id>=0");
+        for (Map<String, Object> stringObjectMap : information) {
+            if (stringObjectMap.get("id") == null) return false;
+            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+            AbnormalJson abJson = new AbnormalJson();
+            abJson.setThreatType(
+                    mapType.get(stringObjectMap.get("eventCode"))
+            );
+            abJson.setOriginID((Integer) stringObjectMap.get("id"));
+            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+            abJson.setThreatUserID((String) stringObjectMap.get("agent"));
+            abJson.setThreatEnterpriseID((String) stringObjectMap.get("paymentCompany"));
+            abJson.setThreatCredenID((String)stringObjectMap.get("netticketID"));
+            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+            abJson.setThreatedIP("");
+            if (!DB_Operation.Insert(conn, abJson)) return false;
+        }
+        information = DB_Operation.Select(conn, "*", "jxtlj", "id>=0");
+        for (Map<String, Object> stringObjectMap : information) {
+            if (stringObjectMap.get("id") == null) return false;
+            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+            AbnormalJson abJson = new AbnormalJson();
+            abJson.setThreatType(
+                    mapType.get(stringObjectMap.get("eventCode"))
+            );
+            abJson.setOriginID((Integer) stringObjectMap.get("id"));
+            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+            abJson.setThreatUserID("");
+            abJson.setThreatEnterpriseID("");
+            abJson.setThreatCredenID("");
+            abJson.setThreatIP((String) stringObjectMap.get("fakeSysIP"));
+            abJson.setThreatedIP((String) stringObjectMap.get("appIP"));
+            if (!DB_Operation.Insert(conn, abJson)) return false;
+        }
+        information = DB_Operation.Select(conn, "*", "cfzfchbx", "id>=0");
+        for (Map<String, Object> stringObjectMap : information) {
+            if (stringObjectMap.get("id") == null) return false;
+            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+            AbnormalJson abJson = new AbnormalJson();
+            abJson.setThreatType(
+                    mapType.get(stringObjectMap.get("eventCode"))
+            );
+            abJson.setOriginID((Integer) stringObjectMap.get("id"));
+            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+            abJson.setThreatUserID((String) stringObjectMap.get("agent"));
+            abJson.setThreatEnterpriseID((String) stringObjectMap.get("paymentCompany"));
+            abJson.setThreatCredenID((String) stringObjectMap.get("netticketID"));
+            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+            abJson.setThreatedIP("");
+            if (!DB_Operation.Insert(conn, abJson)) return false;
+        }
+        information = DB_Operation.Select(conn, "*", "yhtypjdchzsb", "id>=0");
+        for (Map<String, Object> stringObjectMap : information) {
+            if (stringObjectMap.get("id") == null) return false;
+            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+            AbnormalJson abJson = new AbnormalJson();
+            abJson.setThreatType(
+                    mapType.get(stringObjectMap.get("eventCode"))
+            );
+            abJson.setOriginID((Integer) stringObjectMap.get("id"));
+            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+            abJson.setThreatUserID((String) stringObjectMap.get("agent"));
+            abJson.setThreatEnterpriseID("");
+            abJson.setThreatCredenID((String) stringObjectMap.get("netticketID"));
+            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+            abJson.setThreatedIP("");
+            if (!DB_Operation.Insert(conn, abJson)) return false;
+        }
+        information = DB_Operation.Select(conn, "*", "yhbtpjdchzsb", "id>=0");
+        for (Map<String, Object> stringObjectMap : information) {
+            if (stringObjectMap.get("id") == null) return false;
+            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+            AbnormalJson abJson = new AbnormalJson();
+            abJson.setThreatType(
+                    mapType.get(stringObjectMap.get("eventCode"))
+            );
+            abJson.setOriginID((Integer) stringObjectMap.get("id"));
+            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+            abJson.setThreatUserID((String) stringObjectMap.get("agent"));
+            abJson.setThreatEnterpriseID("");
+            abJson.setThreatCredenID((String) stringObjectMap.get("netticketID"));
+            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+            abJson.setThreatedIP("");
+            if (!DB_Operation.Insert(conn, abJson)) return false;
+        }
+        information = DB_Operation.Select(conn, "*", "yhdccsrzsb", "id>=0");
+        for (Map<String, Object> stringObjectMap : information) {
+            if (stringObjectMap.get("id") == null) return false;
+            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+            AbnormalJson abJson = new AbnormalJson();
+            abJson.setThreatType(
+                    mapType.get(stringObjectMap.get("eventCode"))
+            );
+            abJson.setOriginID((Integer) stringObjectMap.get("id"));
+            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+            abJson.setThreatUserID((String) stringObjectMap.get("authUserID"));
+            abJson.setThreatEnterpriseID("");
+            abJson.setThreatCredenID("");
+            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+            abJson.setThreatedIP("");
+            if (!DB_Operation.Insert(conn, abJson)) return false;
+        }
+        information = DB_Operation.Select(conn, "*", "yhpfbgpjzt", "id>=0");
+        for (Map<String, Object> stringObjectMap : information) {
+            if (stringObjectMap.get("id") == null) return false;
+            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+            AbnormalJson abJson = new AbnormalJson();
+            abJson.setThreatType(
+                    mapType.get(stringObjectMap.get("eventCode"))
+            );
+            abJson.setOriginID((Integer) stringObjectMap.get("id"));
+            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+            abJson.setThreatUserID((String) stringObjectMap.get("Agent"));
+            abJson.setThreatEnterpriseID("");
+            abJson.setThreatCredenID((String)stringObjectMap.get("netticketID"));
+            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+            abJson.setThreatedIP("");
+            if (!DB_Operation.Insert(conn, abJson)) return false;
+        }
+        information = DB_Operation.Select(conn, "*", "dccyjfp", "id>=0");
+        for (Map<String, Object> stringObjectMap : information) {
+            if (stringObjectMap.get("id") == null) return false;
+            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+            AbnormalJson abJson = new AbnormalJson();
+            abJson.setThreatType(
+                    mapType.get(stringObjectMap.get("eventCode"))
+            );
+            abJson.setOriginID((Integer) stringObjectMap.get("id"));
+            abJson.setUploadSysID((String) stringObjectMap.get("appID"));
+            abJson.setThreatUserID((String) stringObjectMap.get("appUserID"));
+            abJson.setThreatEnterpriseID("");
+            abJson.setThreatCredenID("");
+            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+            abJson.setThreatedIP("");
+            if (!DB_Operation.Insert(conn, abJson)) return false;
+        }
+        information = DB_Operation.Select(conn, "*", "xtdccsrzsb", "id>=0");
+        for (Map<String, Object> stringObjectMap : information) {
+            if (stringObjectMap.get("id") == null) return false;
+            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+            AbnormalJson abJson = new AbnormalJson();
+            abJson.setThreatType(
+                    mapType.get(stringObjectMap.get("eventCode"))
+            );
+            abJson.setOriginID((Integer) stringObjectMap.get("id"));
+            abJson.setUploadSysID((String) stringObjectMap.get("authSysID"));
+            abJson.setThreatUserID("");
+            abJson.setThreatEnterpriseID("");
+            abJson.setThreatCredenID("");
+            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+            abJson.setThreatedIP("");
+            if (!DB_Operation.Insert(conn, abJson)) return false;
+        }
+        return true;
+
+    }
+
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        Connection abnormalConn = DB_Operation.Connect("dzpj_aqts_202000628");
+        DB_Operation.Connect("abbehavior");
+        if (Deal_inputdata(abnormalConn)) System.out.println("Successful!");
+        else System.out.println("falied!");
+        DB_Operation.Close();
+    }
 }

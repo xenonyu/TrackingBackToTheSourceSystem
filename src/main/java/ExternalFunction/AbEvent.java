@@ -1,77 +1,66 @@
 package ExternalFunction;
+
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
 import Public.DB_Operation;
-//Òì³£ÊÂ¼şµÄ²éÑ¯ÓëÉ¾³ı
+
+//å¼‚å¸¸äº‹ä»¶çš„æŸ¥è¯¢ä¸åˆ é™¤
 public class AbEvent {
-	public static int EventTypeCheck(String EventID) throws SQLException {
-		//²éÑ¯Òì³£ÊÂ¼şµÄÀàĞÍ
-		String resulttemp;
-		if((resulttemp = DB_Operation.Select("eventType", "judgetable", "eventID", "'"+EventID+"'", "eventType"))!=null) {
-			int EventType = Integer.valueOf(resulttemp);
-			return EventType;
-		}
-		else {
-			System.out.println("No data can be found!");
-			return -1;
-		}
-	}
-	public static String AbEventTypejudge(int EventType) {
-		//·µ»Ø²»Í¬µÄÒì³£ÊÂ¼şÀàĞÍ¶ÔÓ¦µÄÖĞÎÄÃû³Æ
-		String AbType;
-		if(EventType==0) AbType = "Í¬Ò»ÓÃ»§»òÍ¬Ò»ÆóÒµ·¢Éú¶à´ÎÒì³£ĞĞÎª";
-		else if(EventType==1) AbType = "²»Í¬ÆóÒµ»ò²»Í¬ÓÃ»§Òì³£ĞĞÎª¹ØÁª";
-		else return null;
-		return AbType;
-	}
-	public static void AbEvent_message_get(String EventID, int EventType) throws SQLException {
-		//¸ù¾İ²»Í¬µÄÒì³£ÊÂ¼şIDÓëÀàĞÍ£¬Êä³ö²»Í¬¸ñÊ½µÄ²éÑ¯ĞÅÏ¢
-		if(EventType==0) {
-			String []information = new String[7];
-			information[0] = "eventType";
-			information[1] = "eventCode";
-			information[2] = "sysUserID"; 
-			information[3] = "appID";
-			information[4] = "appAreaName";
-			information[5] = "entID";
-			information[6] = "entAreaName";
-			information = DB_Operation.Select("eventType,eventCode,sysUserID,appID,appAreaName,entID,entAreaName", "judgetable", "eventID", "'"+EventID+"'",information, 7);
-			if(information==null)
-				System.out.println("No data can be found!");
-			else {
-				System.out.println("eventType:"+information[0]);
-				System.out.println("eventCode:"+information[1]);
-				System.out.println("sysUserID:"+information[2]);
-				System.out.println("appID:"+information[3]);
-				System.out.println("appAreaName:"+information[4]);
-				System.out.println("entID:"+information[5]);
-				System.out.println("entAreaName:"+information[6]);
-			}
-		}
-		else {
-			String []information = new String[7];
-			information[0] = "eventType";
-			information[1] = "eventCode";
-			information[2] = "sysUserID";
-			information[3] = "credIssueEntID";
-			information[4] = "credIssueEntAreaName";
-			information[5] = "credChaStaEntID";
-			information[6] = "credChaStaEntAreaName";
-			information = DB_Operation.Select("eventType,eventCode,sysUserID,credIssueEntID,credIssueEntAreaName,credChaStaEntID,credChaStaEntAreaName", "judgetable", "eventID", "'"+EventID+"'",information, 7);
-			if(information==null)
-				System.out.println("No data can be found!");
-			else {
-				System.out.println("eventType:"+information[0]);
-				System.out.println("eventCode:"+information[1]);
-				System.out.println("sysUserID:"+information[2]);
-				System.out.println("credIssueEntID:"+information[3]);
-				System.out.println("credIssueEntAreaName:"+information[4]);
-				System.out.println("credChaStaEntID:"+information[5]);
-				System.out.println("credChaStaEntAreaName:"+information[6]);
-			}
-		}
-	}
-	public static boolean Delete_AbEvent(String EventID) throws SQLException {
-		//É¾³ıÄ³ID¶ÔÓ¦µÄÒì³£ÊÂ¼ş
-		return DB_Operation.Delete("judgetable", "eventID", EventID);
-	}
+    public static int EventTypeCheck(Connection conn, String EventID) throws SQLException {
+        //æŸ¥è¯¢å¼‚å¸¸äº‹ä»¶çš„ç±»å‹
+        List<Map<String, Object>> resulttemp = DB_Operation.Select(conn,"eventType", "judgetable", "eventID="+EventID );
+        if (!resulttemp.isEmpty()) return (int) (Integer) resulttemp.get(0).get("eventType");
+        System.out.println("No data can be found!");
+        return -1;
+    }
+
+    public static String AbEventTypejudge(int EventType) {
+        //è¿”å›ä¸åŒçš„å¼‚å¸¸äº‹ä»¶ç±»å‹å¯¹åº”çš„ä¸­æ–‡åç§°
+        String AbType;
+        if (EventType == 0) AbType = "åŒä¸€ç”¨æˆ·æˆ–åŒä¸€ä¼ä¸šå‘ç”Ÿå¤šæ¬¡å¼‚å¸¸è¡Œä¸º";
+        else if (EventType == 1) AbType = "ä¸åŒä¼ä¸šæˆ–ä¸åŒç”¨æˆ·å¼‚å¸¸è¡Œä¸ºå…³è”";
+        else return null;
+        return AbType;
+    }
+
+    public static void AbEvent_message_get(Connection conn, String EventID, int EventType) throws SQLException {
+        //æ ¹æ®ä¸åŒçš„å¼‚å¸¸äº‹ä»¶IDä¸ç±»å‹ï¼Œè¾“å‡ºä¸åŒæ ¼å¼çš„æŸ¥è¯¢ä¿¡æ¯
+        if (EventType == 0) {
+            List<Map<String, Object>> information;
+            information = DB_Operation.Select(conn, "eventType,eventCode,sysUserID,appID,appAreaName,entID,entAreaName", "judgetable", "eventID="+EventID + "'");
+            if (information == null)
+                System.out.println("No data can be found!");
+            else {
+                System.out.println("eventType:" + information.get(0).get("eventType"));
+                System.out.println("eventCode:" + information.get(0).get("eventCode"));
+                System.out.println("sysUserID:" + information.get(0).get("sysUserID"));
+                System.out.println("appID:" + information.get(0).get("appID"));
+                System.out.println("appAreaName:" + information.get(0).get("appAreaName"));
+                System.out.println("entID:" + information.get(0).get("entID"));
+                System.out.println("entAreaName:" + information.get(0).get("entAreaName"));
+            }
+        } else {
+            List<Map<String, Object>> information;
+            information = DB_Operation.Select(conn, "eventType,eventCode,sysUserID,credIssueEntID,credIssueEntAreaName,credChaStaEntID,credChaStaEntAreaName", "judgetable", "eventID=" + EventID);
+            if (information == null)
+                System.out.println("No data can be found!");
+            else {
+                System.out.println("eventType:" + information.get(0).get("eventType"));
+                System.out.println("eventCode:" + information.get(0).get("eventCode"));
+                System.out.println("sysUserID:" + information.get(0).get("sysUserID"));
+                System.out.println("credIssueEntID:" + information.get(0).get("credIssueEntID"));
+                System.out.println("credIssueEntAreaName:" + information.get(0).get("credIssueEntAreaName"));
+                System.out.println("credChaStaEntID:" + information.get(0).get("credChaStaEntID"));
+                System.out.println("credChaStaEntAreaName:" + information.get(0).get("credChaStaEntAreaName"));
+            }
+        }
+    }
+
+    public static boolean Delete_AbEvent(String EventID) throws SQLException {
+        //åˆ é™¤æŸIDå¯¹åº”çš„å¼‚å¸¸äº‹ä»¶
+        return DB_Operation.Delete("judgetable", "eventID", EventID);
+    }
 }

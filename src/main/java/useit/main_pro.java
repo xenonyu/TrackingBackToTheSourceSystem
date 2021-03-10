@@ -1,6 +1,8 @@
 package useit;
+
 import java.sql.SQLException;
 import java.util.Scanner;
+
 import Public.DB_Operation;
 import abnormal_process.*;
 import ExternalFunction.*;
@@ -8,70 +10,72 @@ import Individual_judge.*;
 import path_localize.*;
 
 public class main_pro {
-	public static String Input(int closesc) {
-		Scanner sc = new Scanner(System.in);
-		String result = sc.nextLine();
-		if(closesc == 1) sc.close();
-		return result;
-	}
-	public static int select_login_regist() {
-		System.out.println("ÇëÑ¡ÔñÄúÒª×öÊ²Ã´£º");
-		System.out.println("1£ºµÇÂ¼    2£º×¢²á");
-		String option = Input(0);
-		if(option.equals("1")) return 1;
-		else if(option.equals("2")) return 2;
-		else return 0;
-	}
-	public static int select_function() {
-		System.out.println("ÇëÑ¡ÔñÄúÒªÊ¹ÓÃµÄ¹¦ÄÜ£º");
-		System.out.println("1£ºµ÷ÓÃ¹¥»÷Â·¾¶¶¨Î»½Ó¿Ú");
-		System.out.println("2£ºµ÷ÓÃÒì³£¸öÌå/ÇøÓòÅĞ¶¨½Ó¿Ú");
-		System.out.println("3£ºµ÷ÓÃÓ¦¼±Áª¶¯´¦ÖÃ½Ó¿Ú");
-		System.out.println("4£ºµ÷ÓÃÆäËû¹¦ÄÜ");
-		String option = Input(0);
-		if(option.equals("1")) return 1;
-		else if(option.equals("2")) return 2;
-		else if(option.equals("3")) return 3;
-		else if(option.equals("4")) return 4;
-		else return 0;
-	}
-	public static void main(String[] args) throws SQLException, ClassNotFoundException {
-		DB_Operation.Connect("register");
-		int option = select_login_regist();
-		if(option==1) {
-			String user = login_regist.login();
-			if(user != null) {
-				option = select_function();
-				switch(option) {
-				case 1:{
-					Journal.write(user, "µ÷ÓÃ¹¥»÷Â·¾¶¶¨Î»½Ó¿Ú");
-					path_localize_main.main(args);
-					break;
-				}
-				case 2:{
-					Journal.write(user, "µ÷ÓÃÒì³£¸öÌå/ÇøÓòÅĞ¶¨½Ó¿Ú");
-					Individual_judge_main.main(args);
-					break;
-				}
-				case 3:{
-					Journal.write(user, "µ÷ÓÃÓ¦¼±Áª¶¯´¦ÖÃ½Ó¿Ú");
-					AbnormalProcessMain.main(args);
-					break;
-				}
-				case 4:{
-					Journal.write(user, "µ÷ÓÃÆäËû¹¦ÄÜ");
-					ExternalFunction_main.main(args);
-					break;
-				}
-				default:{
-					System.out.println("ÊäÈë·Ç·¨£¡");
-					break;
-				}
-				}
-			}
-		}
-		else if(option==2) login_regist.regist();
-		else System.out.println("ÊäÈë·Ç·¨£¡");
-		DB_Operation.Close();
-	}
+    public static String Input(int closesc) {
+        Scanner sc = new Scanner(System.in);
+        String result = sc.nextLine();
+        if (closesc == 1) sc.close();
+        return result;
+    }
+
+    public static int select_login_regist() {
+        System.out.println("è¯·é—®ä½ æƒ³è¦åšä»€ä¹ˆï¼Ÿ");
+        System.out.println("1ï¼šç™»å½•    2ï¼šæ³¨å†Œ");
+        String option = Input(0);
+        if (option.equals("1")) return 1;
+        else if (option.equals("2")) return 2;
+        else return 0;
+    }
+
+    public static int select_function() {
+        System.out.println("è¯·é€‰æ‹©æ‚¨è¦ä½¿ç”¨çš„åŠŸèƒ½ï¼š");
+        System.out.println("1ï¼šè°ƒç”¨æ”»å‡»è·¯å¾„å®šä½æ¥å£");
+        System.out.println("2ï¼šè°ƒç”¨å¼‚å¸¸ä¸ªä½“/åŒºåŸŸåˆ¤å®šæ¥å£");
+        System.out.println("3ï¼šè°ƒç”¨åº”æ€¥è”åŠ¨å¤„ç½®æ¥å£");
+        System.out.println("4ï¼šè°ƒç”¨å…¶ä»–åŠŸèƒ½");
+        String option = Input(0);
+        if (option.equals("1")) return 1;
+        else if (option.equals("2")) return 2;
+        else if (option.equals("3")) return 3;
+        else if (option.equals("4")) return 4;
+        else return 0;
+    }
+
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        DB_Operation.Connect("register");
+        int option = select_login_regist();
+        if (option == 1) {
+            String user = login_regist.login();
+            if (user != null) {
+                option = select_function();
+                switch (option) {
+                    case 1: {
+                        Journal.write(user, "è°ƒç”¨æ”»å‡»è·¯å¾„å®šä½æ¥å£");
+                        path_localize_main.main(args);
+                        break;
+                    }
+                    case 2: {
+                        Journal.write(user, "è°ƒç”¨å¼‚å¸¸ä¸ªä½“/åŒºåŸŸåˆ¤å®šæ¥å£");
+                        Individual_judge_main.main(args);
+                        break;
+                    }
+                    case 3: {
+                        Journal.write(user, "è°ƒç”¨åº”æ€¥è”åŠ¨å¤„ç½®æ¥å£");
+                        AbnormalProcessMain.main(args);
+                        break;
+                    }
+                    case 4: {
+                        Journal.write(user, "è°ƒç”¨å…¶ä»–åŠŸèƒ½");
+                        ExternalFunction_main.main(args);
+                        break;
+                    }
+                    default: {
+                        System.out.println("è¾“å…¥éæ³•ï¼");
+                        break;
+                    }
+                }
+            }
+        } else if (option == 2) login_regist.regist();
+        else System.out.println("è¾“å…¥éæ³•ï¼");
+        DB_Operation.Close();
+    }
 }

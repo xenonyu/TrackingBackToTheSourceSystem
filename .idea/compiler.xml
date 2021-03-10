@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="TracingBackToTheSourceSystem" target="6" />
+      <module name="TracingBackToTheSourceSystem" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

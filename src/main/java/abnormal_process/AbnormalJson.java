@@ -1,13 +1,10 @@
 package abnormal_process;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import protocol.MessageProtocol;
-import protocol.ProtocolUtil;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class AbnormalJson {
     private String jsonMessage;
@@ -19,63 +16,129 @@ public class AbnormalJson {
     private String threatEnterpriseID;
     private String threatCredenID;
     private String threatIP;
+    private String threatedIP; // ä»…å­˜åœ¨æ•°æ®åº“
     private String threatIPSegment;
     private String otherMsg;
+    private int originID; // ä»…å­˜åœ¨æ•°æ®åº“
 
-    private String[] threatIPArray = {"123.46.78.234", "123.46.78.242", "123.45.78.234"};
-    private static Map<String, Integer> threatTypeArray = new HashMap<String, Integer>();
+    private static final Map<String, Integer> threatTypeArray = new HashMap<>();
+
     static {
-        threatTypeArray.put("·şÎñÆ÷·ÂÃ°", 0x0101);
-        threatTypeArray.put("¼ÙÏµÍ³Á¬½Ó", 0x0102);
-        threatTypeArray.put("ÓÃ»§¶à´Î³¢ÊÔ¿ÚÁî", 0x0201);
-        threatTypeArray.put("ÖØ¸´±¨Ïú¡¢×÷·Ï/³åºìÆ¾¾İ±¨Ïú", 0x0301);
-        threatTypeArray.put("¼Ù·¢Æ±±¨Ïú", 0x0302);
-        threatTypeArray.put("Í¬Ò»ÆóÒµ¶ÌÊ±¼ä¿ª¾ß´óÁ¿Æ¾¾İ", 0x0303 );
-        threatTypeArray.put("Í¬Ò»ÆóÒµ¶ÌÊ±¼ä¿ª¾ß´óÁ¿´ó¶îÆ¾¾İ", 0x0304 );
-        threatTypeArray.put("Í¬Ò»ÆóÒµÒì³£Ê±¼ä¿ª¾ß´óÁ¿Æ¾¾İ", 0x0305 );
-        threatTypeArray.put("Í¬Ò»ÆóÒµÒì³£Ê±¼ä¿ª¾ß´ó¶îÆ¾¾İ", 0x0306 );
-        threatTypeArray.put("Í¬Ò»ÓÃ»§¿çÆóÒµÒì³£Ê±¼ä¿ª¾ß´óÁ¿Æ¾¾İ", 0x0307 );
-        threatTypeArray.put("Í¬Ò»ÓÃ»§¿çÆóÒµÒì³£Ê±¼ä¿ª¾ß´óÁ¿´ó¶îÆ¾¾İ", 0x0308 );
-        threatTypeArray.put("Í¬Ò»ÓÃ»§¶ÌÊ±¼ä¿çÆóÒµ¿ª¾ß´óÁ¿´ó¶îÆ¾¾İ", 0x0309 );
-        threatTypeArray.put("ÊÜÆ±ÆóÒµ·¢Éú¶à´ÎÒì³£ĞĞÎª/¿ªÆ±ÆóÒµ·¢Éú¶à´ÎÒì³£ĞĞÎª", 0x0801 );
+        threatTypeArray.put("æœåŠ¡å™¨ä»¿å†’", 0x0101);
+        threatTypeArray.put("å‡ç³»ç»Ÿè¿æ¥", 0x0102);
+        threatTypeArray.put("ç”¨æˆ·å¤šæ¬¡å°è¯•å£ä»¤", 0x0201);
+        threatTypeArray.put("é‡å¤æŠ¥é”€ã€ä½œåºŸ/å†²çº¢å‡­æ®æŠ¥é”€", 0x0301);
+        threatTypeArray.put("å‡å‘ç¥¨æŠ¥é”€", 0x0302);
+        threatTypeArray.put("åŒä¸€ä¼ä¸šçŸ­æ—¶é—´å¼€å…·å¤§é‡å‡­æ®", 0x0303);
+        threatTypeArray.put("åŒä¸€ä¼ä¸šçŸ­æ—¶é—´å¼€å…·å¤§é‡å¤§é¢å‡­æ®", 0x0304);
+        threatTypeArray.put("åŒä¸€ä¼ä¸šå¼‚å¸¸æ—¶é—´å¼€å…·å¤§é‡å‡­æ®", 0x0305);
+        threatTypeArray.put("åŒä¸€ä¼ä¸šå¼‚å¸¸æ—¶é—´å¼€å…·å¤§é¢å‡­æ®", 0x0306);
+        threatTypeArray.put("åŒä¸€ç”¨æˆ·è·¨ä¼ä¸šå¼‚å¸¸æ—¶é—´å¼€å…·å¤§é‡å‡­æ®", 0x0307);
+        threatTypeArray.put("åŒä¸€ç”¨æˆ·è·¨ä¼ä¸šå¼‚å¸¸æ—¶é—´å¼€å…·å¤§é‡å¤§é¢å‡­æ®", 0x0308);
+        threatTypeArray.put("åŒä¸€ç”¨æˆ·çŸ­æ—¶é—´è·¨ä¼ä¸šå¼€å…·å¤§é‡å¤§é¢å‡­æ®", 0x0309);
+        threatTypeArray.put("åŒä¸€ç”¨æˆ·/ä¼ä¸šå¤šæ¬¡æŸ¥éªŒå‡å‘ç¥¨", 0x0401);
+        threatTypeArray.put("åŒä¸€å‡­æ®é¢‘ç¹å˜æ›´çŠ¶æ€", 0x0501);
+        threatTypeArray.put("åŒä¸€ç”¨æˆ·é¢‘ç¹å˜æ›´ç”µå­å‡­æ®çŠ¶æ€", 0x0601);
+        threatTypeArray.put("åŒä¸€ç”¨æˆ·å¤šæ¬¡å°è¯•è®¤è¯å¤±è´¥", 0x0701);
+        threatTypeArray.put("åŒä¸€ç³»ç»Ÿå¤šæ¬¡å°è¯•è®¤è¯å¤±è´¥", 0x0702);
+        threatTypeArray.put("å—ç¥¨ä¼ä¸šå‘ç”Ÿå¤šæ¬¡å¼‚å¸¸è¡Œä¸º/å¼€ç¥¨ä¼ä¸šå‘ç”Ÿå¤šæ¬¡å¼‚å¸¸è¡Œä¸º", 0x0801);
+        threatTypeArray.put("ä¸åŒä¼ä¸šæˆ–ä¸åŒç”¨æˆ·å¼‚å¸¸è¡Œä¸ºå…³è”", 0x0901);
+        threatTypeArray.put("å¤šæ¬¡æŸ¥è¯¢/ä¸‹è½½", 0x0A01);
+        threatTypeArray.put("å®¢ç¥¨ä¿¡æ¯å¤šæ¬¡æŸ¥éªŒçŠ¶æ€", 0x0B01);
+
     }
 
-    public AbnormalJson() {
-
-    }
-    public AbnormalJson(String threatType){
+    public AbnormalJson(Integer threatType,
+                        String upLoadSysID,
+                        String threatUserID,
+                        String EnterpriseID,
+                        String CredenID,
+                        String threatIP,
+                        String threatedIP) {
+/**
+ *timeStampæ˜¯Stringç±»å‹çš„æ—¶é—´æˆ³
+ * è¿™é‡Œè®¾ç½®å‘é€æ¶ˆæ¯
+ * */
+        setThreatID(Long.toString(getMicTime()));
+        setTimeStamp(Long.toString(getMicTime()));
+        setThreatType(threatType);
+        setUploadSysID(upLoadSysID);
+        setThreatUserID(threatUserID);
+        setThreatEnterpriseID(EnterpriseID);
+        setThreatCredenID(CredenID);
+        setThreatIP(threatIP);
+        setThreatedIP(threatedIP);
+        setThreatIPSegment("");
+        setOtherMsg("");
         /**
-         *timeStampÊÇStringÀàĞÍµÄÊ±¼ä´Á
-         * ÕâÀïÉèÖÃ·¢ËÍÏûÏ¢
+         * if threat type is 0x0800 - 0x0900 add other msg
+         */
+        if (getThreatType() != null) {
+            if (getThreatType() > 2048 && getThreatType() < 2304) {
+                setOtherMsg(String.valueOf(getRandom(1, 4)));
+            }
+            if (getThreatType() > 1536 && getThreatType() < 1792) {
+                setOtherMsg(String.valueOf(getRandom(1, 3)));
+            }
+        }
+    }
+
+    public void analysisOtherMsg(){
+        if (getThreatType() != null) {
+            if (getThreatType() > 2048 && getThreatType() < 2304) {
+                setOtherMsg(String.valueOf(getRandom(1, 4)));
+            }
+            else if (getThreatType() > 1536 && getThreatType() < 1792) {
+                setOtherMsg(String.valueOf(getRandom(1, 3)));
+            }
+            else{
+                setOtherMsg("");
+            }
+        }
+    }
+
+    public AbnormalJson(String threatType) {
+        /**
+         *timeStampæ˜¯Stringç±»å‹çš„æ—¶é—´æˆ³
+         * è¿™é‡Œè®¾ç½®å‘é€æ¶ˆæ¯
          * */
-        setThreatID(Long.toString(getmicTime()));
-        setTimeStamp(Long.toString(getmicTime()));
+        setThreatID(Long.toString(getMicTime()));
+        setTimeStamp(Long.toString(getMicTime()));
         setThreatType(threatTypeArray.get(threatType));
         setUploadSysID("100002");
         setThreatUserID("49509946");
         setThreatEnterpriseID("34433691");
         setThreatCredenID("4134312");
+        String[] threatIPArray = {"123.46.78.234", "123.46.78.242", "123.45.78.234"};
         setThreatIP(threatIPArray[getRandom(0, threatIPArray.length)]);
         setThreatIPSegment(threatIPArray[getRandom(0, threatIPArray.length)] + "/" + getRandom(0, 24));
         setOtherMsg("");
         /**
          * if threat type is 0x0800 - 0x0900 add other msg
          */
-        if(getThreatType() != null){
-            if(getThreatType() > 2048 && getThreatType() < 2304){
+        if (getThreatType() != null) {
+            if (getThreatType() > 2048 && getThreatType() < 2304) {
                 setOtherMsg(String.valueOf(getRandom(1, 4)));
+            }
+            if (getThreatType() > 1536 && getThreatType() < 1792) {
+                setOtherMsg(String.valueOf(getRandom(1, 3)));
             }
             parseJsonMessage();
         }
 
     }
 
-    public static void main(String args[]){
-        AbnormalJson a = new AbnormalJson("ÊÜÆ±ÆóÒµ·¢Éú¶à´ÎÒì³£ĞĞÎª/¿ªÆ±ÆóÒµ·¢Éú¶à´ÎÒì³£ĞĞÎª");
+    public AbnormalJson() {
+        setThreatID(Long.toString(getMicTime()));
+        setTimeStamp(Long.toString(getMicTime()));
+    }
+
+    public static void main(String[] args) {
+        AbnormalJson a = new AbnormalJson("å—ç¥¨ä¼ä¸šå‘ç”Ÿå¤šæ¬¡å¼‚å¸¸è¡Œä¸º/å¼€ç¥¨ä¼ä¸šå‘ç”Ÿå¤šæ¬¡å¼‚å¸¸è¡Œä¸º");
 
     }
 
-    private void parseJsonMessage(){
+    private void parseJsonMessage() {
         JSONObject targetJson = new JSONObject();
 
         targetJson.put("threatID", getThreatID());
@@ -94,18 +157,17 @@ public class AbnormalJson {
         setJsonMessage(targetJson.toString());
     }
 
-    public static Long getmicTime() {
-        Long cutime = System.currentTimeMillis() * 1000; // Î¢Ãë
-        Long nanoTime = System.nanoTime(); // ÄÉÃë
-        return cutime + (nanoTime - nanoTime / 1000000 * 1000000) / 1000;
+    public static Long getMicTime() {
+        long currTime = System.currentTimeMillis() * 1000; // å¾®ç§’
+        long nanoTime = System.nanoTime(); // çº³ç§’
+        return currTime + (nanoTime - nanoTime / 1000000 * 1000000) / 1000;
     }
 
     public static int getRandom(int min, int max) {
-        int num = new Random().nextInt(max - min) + min;
-        return num;
+        return new Random().nextInt(max - min) + min;
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return this.jsonMessage;
     }
 
@@ -193,10 +255,21 @@ public class AbnormalJson {
         this.otherMsg = otherMsg;
     }
 
-    private void setJsonMessage(String message){
+    private void setJsonMessage(String message) {
         this.jsonMessage = message;
     }
 
 
+    public int getOriginID() {return originID; }
+
+    public void setOriginID(int originID) { this.originID = originID; }
+
+    public String getThreatedIP() {
+        return threatedIP;
+    }
+
+    public void setThreatedIP(String threatedIP) {
+        this.threatedIP = threatedIP;
+    }
 
 }

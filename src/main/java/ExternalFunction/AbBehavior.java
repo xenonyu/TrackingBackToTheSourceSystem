@@ -1,281 +1,140 @@
 package ExternalFunction;
+
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
 import Public.DB_Operation;
-//Òì³£ĞĞÎªµÄ²éÑ¯ÓëÉ¾³ı
+
+//å¼‚å¸¸è¡Œä¸ºçš„æŸ¥è¯¢ä¸åˆ é™¤
 public class AbBehavior {
-	public static int EventCodeCheck(String AbBehaviorID) throws SQLException {
-		//²éÑ¯Òì³£ĞĞÎª±àÂë
-		String resulttemp;
-		if((resulttemp = DB_Operation.Select("eventCode", "authabtable", "abBehaviorID", "'"+AbBehaviorID+"'", "eventCode"))!=null) {
-			int EventCode = Integer.valueOf(resulttemp);
-			return EventCode;
-		}
-		else if((resulttemp = DB_Operation.Select("eventCode", "credabtable", "abBehaviorID", "'"+AbBehaviorID+"'", "eventCode"))!=null){
-			int EventCode = Integer.valueOf(resulttemp);
-			return EventCode;
-		}
-		else if((resulttemp = DB_Operation.Select("eventCode", "servabtable", "abBehaviorID", "'"+AbBehaviorID+"'", "eventCode"))!=null){
-			int EventCode = Integer.valueOf(resulttemp);
-			return EventCode;
-		}
-		else {
-			System.out.println("No data can be found!");
-			return -1;
-		}
-	}
-	public static String AbTypejudge(int Eventcode) {
-		//·µ»Ø²»Í¬µÄÒì³£ĞĞÎª±àÂë¶ÔÓ¦µÄÖĞÎÄÃû³Æ
-		String AbType;
-		switch(Eventcode){
-		case 0: AbType = "·şÎñÆ÷·ÂÃ°"; break;
-		case 1: AbType = "¶à´Î³¢ÊÔ¿ÚÁî"; break;
-		case 2: AbType = "¶à´ÎÖ¤ÊéÈÏÖ¤Ê§°Ü"; break;
-		case 3: AbType = "¼Ù·¢Æ±±¨Ïú"; break;
-		case 4: AbType = "¼ÙÏµÍ³Á¬½Ó"; break;
-		case 5: AbType = "ÖØ¸´×÷·Ï³åºìÆ¾¾İ±¨Ïú"; break;
-		case 6: AbType = "Òì³£Ê±¼ä¿ª¾ß´ó¶îÆ¾¾İ"; break;
-		case 7: AbType = "Òì³£Ê±¼ä¿ª¾ß´óÁ¿Æ¾¾İ"; break;
-		case 8: AbType = "Í¬Ò»ÓÃ»§¶ÌÊ±¼ä¿çÆóÒµ¿ª¾ß´óÁ¿´ó¶îÆ¾¾İ"; break;
-		case 9: AbType = "Í¬Ò»ÓÃ»§Í¬Ò»µç×ÓÆ¾¾İ¶à´Î³¢ÊÔºË×¼Ê§°Ü"; break;
-		case 10: AbType = "Í¬Ò»ÓÃ»§²»Í¬µç×ÓÆ¾¾İ¶à´Î³¢ÊÔºË×¼Ê§°Ü"; break;
-		case 11: AbType = "Í¬Ò»ÓÃ»§¶à´Î³¢ÊÔÈÏÖ¤Ê§°Ü"; break;
-		case 12: AbType = "Í¬Ò»ÓÃ»§Æµ·±±ä¸üµç×ÓÆ¾¾İ×´Ì¬"; break;
-		case 13: AbType = "Í¬Ò»ÆóÒµ¶ÌÊ±¼ä¿ª¾ß´óÁ¿Æ¾¾İ"; break;
-		case 14: AbType = "Í¬Ò»ÆóÒµ¶ÌÊ±¼ä¿ª¾ß´óÁ¿´ó¶îÆ¾¾İ"; break;
-		case 15: AbType = "Í¬Ò»ÓÃ»§/ÆóÒµ¶à´Î²éÑé¼Ù·¢Æ±"; break;
-		case 16: AbType = "Í¬Ò»ÏµÍ³¶à´Î³¢ÊÔÈÏÖ¤Ê§°Ü"; break;
-		case 17: AbType = "Í¬Ò»Æ¾¾İÆµ·±±ä¸ü×´Ì¬"; break;
-		default: AbType = null; break;
-		}
-		return AbType;
-	}
-	public static void AbBehavior_message_get(String AbBehaviorID, int EventCode) throws SQLException {
-		//¸ù¾İ²»Í¬µÄÒì³£ĞĞÎªIDÓë±àÂë£¬Êä³ö²»Í¬¸ñÊ½µÄ²éÑ¯ĞÅÏ¢
-		switch(EventCode) {
-		case 0: {
-			String []information = new String[4];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type00(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("sysAreaName:"+information[1]);
-				System.out.println("fakeSysID:"+information[2]);
-				System.out.println("sysUserID:"+information[3]);
-			}
-			break;
-		}
-		case 1: {
-			String []information = new String[3];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type01(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("personalAPPID:"+information[1]);
-				System.out.println("personalAPPArea:"+information[2]);
-			}
-			break;
-		}
-		case 2: {
-			String []information = new String[5];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type02(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("authCertiUserID:"+information[1]);
-				System.out.println("authCertiSysID:"+information[2]);
-				System.out.println("authCertiSysAreaName:"+information[3]);
-				System.out.println("certiOwnerID:"+information[4]);
-			}
-			break;
-		}
-		case 3: {
-			String []information = new String[10];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type03(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("credIssueUserID:"+information[1]);
-				System.out.println("credReceptUser:"+information[2]);
-				System.out.println("credIssueEntID:"+information[3]);
-				System.out.println("entAppID:"+information[4]);
-				System.out.println("entAppAreaName:"+information[5]);
-				System.out.println("credReimUserID:"+information[6]);
-				System.out.println("credUseUser:"+information[7]);
-				System.out.println("credReimEntID:"+information[8]);
-				System.out.println("credURL:"+information[9]);
-			}
-			break;
-		}
-		case 4: {
-			String []information = new String[3];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type04(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("sysAreaName:"+information[1]);
-				System.out.println("fakeSysID:"+information[2]);
-			}
-			break;
-		}
-		case 5: {
-			String []information = new String[10];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type05(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("credIssueUserID:"+information[1]);
-				System.out.println("credReceptUser:"+information[2]);
-				System.out.println("credIssueEntID:"+information[3]);
-				System.out.println("entAppID:"+information[4]);
-				System.out.println("entAppAreaName:"+information[5]);
-				System.out.println("credReimUserID:"+information[6]);
-				System.out.println("credUseUser:"+information[7]);
-				System.out.println("credReimEntID:"+information[8]);
-				System.out.println("credURL:"+information[9]);
-			}
-			break;
-		}
-		case 6: {
-			String []information = new String[6];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type06(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("credIssueUserID:"+information[1]);
-				System.out.println("credReceptUser:"+information[2]);
-				System.out.println("credIssueEntID:"+information[3]);
-				System.out.println("entAppID:"+information[4]);
-				System.out.println("entAppAreaName:"+information[5]);
-			}
-			break;
-		}
-		case 7: {
-			String []information = new String[6];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type07(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("credIssueUserID:"+information[1]);
-				System.out.println("credReceptUser:"+information[2]);
-				System.out.println("credIssueEntID:"+information[3]);
-				System.out.println("entAppID:"+information[4]);
-				System.out.println("entAppAreaName:"+information[5]);
-			}
-			break;
-		}
-		case 8: {
-			String []information = new String[1];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type08(AbBehaviorID);
-			if(information!=null) {
-			}
-			break;
-		}
-		case 9: {
-			String []information = new String[4];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type09(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("credCheckUserID:"+information[1]);
-				System.out.println("appID:"+information[2]);
-				System.out.println("appAreaName:"+information[3]);
-			}
-			break;
-		}
-		case 10: {
-			String []information = new String[4];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type10(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("credCheckUserID:"+information[1]);
-				System.out.println("appID:"+information[2]);
-				System.out.println("appAreaName:"+information[3]);
-			}
-			break;
-		}
-		case 11: {
-			String []information = new String[3];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type11(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("authSysID:"+information[1]);
-				System.out.println("authSysAreaName:"+information[2]);
-			}
-			break;
-		}
-		case 12: {
-			String []information = new String[4];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type12(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("sysUserID:"+information[1]);
-				System.out.println("appID:"+information[2]);
-				System.out.println("appAreaName:"+information[3]);
-			}
-			break;
-		}
-		case 13: {
-			String []information = new String[6];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type13(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("credIssueUserID:"+information[1]);
-				System.out.println("credReceptUser:"+information[2]);
-				System.out.println("credIssueEntID:"+information[3]);
-				System.out.println("entAppID:"+information[4]);
-				System.out.println("entAppAreaName:"+information[5]);
-			}
-			break;
-		}
-		case 14: {
-			String []information = new String[6];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type14(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("credIssueUserID:"+information[1]);
-				System.out.println("credReceptUser:"+information[2]);
-				System.out.println("credIssueEntID:"+information[3]);
-				System.out.println("entAppID:"+information[4]);
-				System.out.println("entAppAreaName:"+information[5]);
-			}
-			break;
-		}
-		case 15: {
-			String []information = new String[4];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type15(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("AppID:"+information[1]);
-				System.out.println("AppAreaName:"+information[2]);
-				System.out.println("AppUserID:"+information[3]);
-			}
-			break;
-		}
-		case 16: {
-			String []information = new String[3];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type16(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("authSysID:"+information[1]);
-				System.out.println("authSysAreaName:"+information[2]);
-			}
-			break;
-		}
-		case 17: {
-			String []information = new String[4];
-			information = PathCheck_judgeby_abtype.AbBehavior_Type17(AbBehaviorID);
-			if(information!=null) {
-				System.out.println("eventCode:"+information[0]);
-				System.out.println("sysUserID:"+information[1]);
-				System.out.println("appID:"+information[2]);
-				System.out.println("appAreaName:"+information[3]);
-			}
-			break;
-		}
-		default: break;
-		}
-	}
-	public static boolean Delete_AbBehavior(String AbBehaviorID) throws SQLException {
-		//É¾³ıÄ³ID¶ÔÓ¦µÄÒì³£ĞĞÎª
-		int EventCode = AbBehavior.EventCodeCheck(AbBehaviorID);
-		String tablename;
-		if((EventCode==2)||(EventCode>=9)&&(EventCode<=12)||(EventCode>=15))
-			tablename = "authabtable";
-		else if((EventCode==0)||(EventCode==1)||(EventCode==4))
-			tablename = "servabtable";
-		else 
-			tablename = "credabtable";
-		return DB_Operation.Delete(tablename, "abBehaviorID", AbBehaviorID);
-	}
+    public static int EventCodeCheck(Connection conn, String AbBehaviorID) throws SQLException {
+        //æŸ¥è¯¢å¼‚å¸¸è¡Œä¸ºç¼–ç 
+        List<Map<String, Object>> resulttemp;
+        resulttemp = DB_Operation.Select(conn, "eventCode", "authabtable", "abBehaviorID="+AbBehaviorID);
+        if (!resulttemp.isEmpty()) return (Integer) resulttemp.get(0).get("eventCode");
+        resulttemp = DB_Operation.Select(conn, "eventCode", "servertable", "abBehaviorID="+AbBehaviorID);
+        if (!resulttemp.isEmpty()) return (Integer) resulttemp.get(0).get("eventCode");
+        resulttemp = DB_Operation.Select(conn, "eventCode", "credabtable", "abBehaviorID="+AbBehaviorID);
+        if (!resulttemp.isEmpty()) return (Integer) resulttemp.get(0).get("eventCode");
+        System.out.println("No data can be found!");
+        return -1;
+    }
+
+    public static String AbTypejudge(int Eventcode) {
+        //è¿”å›ä¸åŒçš„å¼‚å¸¸è¡Œä¸ºç¼–ç å¯¹åº”çš„ä¸­æ–‡åç§°
+        String AbType;
+        switch (Eventcode) {
+            case 0:
+                AbType = "æœåŠ¡å™¨ä»¿å†’";
+                break;
+            case 1:
+                AbType = "å¤šæ¬¡å°è¯•å£ä»¤";
+                break;
+            case 2:
+                AbType = "å¤šæ¬¡è¯ä¹¦è®¤è¯å¤±è´¥";
+                break;
+            case 3:
+                AbType = "å‡å‘ç¥¨æŠ¥é”€";
+                break;
+            case 4:
+                AbType = "å‡ç³»ç»Ÿè¿æ¥";
+                break;
+            case 5:
+                AbType = "é‡å¤ä½œåºŸå†²çº¢å‡­æ®æŠ¥é”€";
+                break;
+            case 6:
+                AbType = "å¼‚å¸¸æ—¶é—´å¼€å…·å¤§é¢å‡­æ®";
+                break;
+            case 7:
+                AbType = "å¼‚å¸¸æ—¶é—´å¼€å…·å¤§é‡å‡­æ®";
+                break;
+            case 8:
+                AbType = "åŒä¸€ç”¨æˆ·çŸ­æ—¶é—´è·¨ä¼ä¸šå¼€å…·å¤§é‡å¤§é¢å‡­æ®";
+                break;
+            case 9:
+                AbType = "åŒä¸€ç”¨æˆ·åŒä¸€ç”µå­å‡­æ®å¤šæ¬¡å°è¯•æ ¸å‡†å¤±è´¥";
+                break;
+            case 10:
+                AbType = "åŒä¸€ç”¨æˆ·ä¸åŒç”µå­å‡­æ®å¤šæ¬¡å°è¯•æ ¸å‡†å¤±è´¥";
+                break;
+            case 11:
+                AbType = "åŒä¸€ç”¨æˆ·å¤šæ¬¡å°è¯•è®¤è¯å¤±è´¥";
+                break;
+            case 12:
+                AbType = "åŒä¸€ç”¨æˆ·é¢‘ç¹å˜æ›´ç”µå­å‡­æ®çŠ¶æ€";
+                break;
+            case 13:
+                AbType = "åŒä¸€ä¼ä¸šçŸ­æ—¶é—´å¼€å…·å¤§é‡å‡­æ®";
+                break;
+            case 14:
+                AbType = "åŒä¸€ä¼ä¸šçŸ­æ—¶é—´å¼€å…·å¤§é‡å¤§é¢å‡­æ®";
+                break;
+            case 15:
+                AbType = "åŒä¸€ç”¨æˆ·/ä¼ä¸šå¤šæ¬¡æŸ¥éªŒå‡å‘ç¥¨";
+                break;
+            case 16:
+                AbType = "åŒä¸€ç³»ç»Ÿå¤šæ¬¡å°è¯•è®¤è¯å¤±è´¥";
+                break;
+            case 17:
+                AbType = "åŒä¸€å‡­æ®é¢‘ç¹å˜æ›´çŠ¶æ€";
+                break;
+            default:
+                AbType = null;
+                break;
+        }
+        return AbType;
+    }
+
+    public static void AbBehavior_message_get(Connection conn, String AbBehaviorID, int EventCode) throws SQLException {
+        //æ ¹æ®ä¸åŒçš„å¼‚å¸¸è¡Œä¸ºIDä¸ç¼–ç ï¼Œè¾“å‡ºä¸åŒæ ¼å¼çš„æŸ¥è¯¢ä¿¡æ¯
+        switch (EventCode) {
+            case 0: {
+                List<Map<String, Object>> information;
+                information = PathCheck_judgeby_abtype.AbBehavior_Type00(conn, AbBehaviorID);
+                if (information != null)
+                    for (Map.Entry<String, Object> entry : information.get(0).entrySet()){
+                        System.out.println(entry.getKey() + ": " + entry.getValue());
+                    }
+                else System.out.println("data not found");
+                break;
+            }
+            case 1: {
+                List<Map<String, Object>> information;
+                information = PathCheck_judgeby_abtype.AbBehavior_Type01(conn, AbBehaviorID);
+                if (information != null)
+                    for (Map.Entry<String, Object> entry : information.get(0).entrySet()){
+                        System.out.println(entry.getKey() + ": " + entry.getValue());
+                    }
+                else System.out.println("data not found");
+                break;
+            }
+            case 2: {
+                List<Map<String, Object>> information;
+                information = PathCheck_judgeby_abtype.AbBehavior_Type02(conn, AbBehaviorID);
+                if (information != null)
+                    for (Map.Entry<String, Object> entry : information.get(0).entrySet()){
+                        System.out.println(entry.getKey() + ": " + entry.getValue());
+                    }
+                else System.out.println("data not found");
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    public static boolean Delete_AbBehavior(Connection conn, String AbBehaviorID) throws SQLException {
+        //åˆ é™¤æŸIDå¯¹åº”çš„å¼‚å¸¸è¡Œä¸º
+        int EventCode = AbBehavior.EventCodeCheck(conn, AbBehaviorID);
+        String tablename;
+        if ((EventCode == 2) || (EventCode >= 9) && (EventCode <= 12) || (EventCode >= 15))
+            tablename = "authabtable";
+        else if ((EventCode == 0) || (EventCode == 1) || (EventCode == 4))
+            tablename = "servabtable";
+        else
+            tablename = "credabtable";
+        return DB_Operation.Delete(tablename, "abBehaviorID", AbBehaviorID);
+    }
 }
