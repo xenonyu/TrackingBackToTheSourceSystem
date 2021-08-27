@@ -1,11 +1,11 @@
-package ExternalFunction;
+package main.java.ExternalFunction;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import Public.DB_Operation;
+import main.java.Public.DB_Operation;
 
 //查询不同异常行为对应的区域信息
 public class PathCheck_judgeby_abtype {

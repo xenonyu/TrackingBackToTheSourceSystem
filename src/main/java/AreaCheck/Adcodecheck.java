@@ -1,11 +1,10 @@
-package AreaCheck;
+package main.java.AreaCheck;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import Public.DB_Operation;
+import main.java.Public.DB_Operation;
 //实现基于行政区划编码的查询
 public class Adcodecheck {
 	public static String Input() {
@@ -31,13 +30,12 @@ public class Adcodecheck {
 		}
 	}
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		Connection conn = DB_Operation.Connect("adcodedatabase");
+		Connection conn = DB_Operation.GetConnection("adcodedatabase");
 		System.out.println("Please input the 6bit administrative division code:");
 		String adcode = Input();
 		//long startTime = System.currentTimeMillis();
 		areacheck(conn, adcode);
 		//long endTime = System.currentTimeMillis();
 		//System.out.println("The time costs:"+(endTime - startTime)+"ms");
-		DB_Operation.Close();
 	}
 }

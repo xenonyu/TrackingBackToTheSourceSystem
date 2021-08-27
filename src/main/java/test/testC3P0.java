@@ -1,4 +1,4 @@
-package test;
+package main.java.test;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import utils.C3P0Utils;

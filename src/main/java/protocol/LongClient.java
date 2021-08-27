@@ -1,15 +1,10 @@
-package protocol;
+package main.java.protocol;
 
-import abnormal_process.AbnormalJson;
-import com.alibaba.fastjson.JSONObject;
+import main.java.abnormal_process.AbnormalJson;
+import main.java.protocol.Config;
 
-import java.awt.*;
 import java.io.*;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
-import java.util.Scanner;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class LongClient {
     private static Socket socket;
@@ -65,7 +60,7 @@ public class LongClient {
 
     private static void connect() {
         try {
-            server_ip = Config.ADDRESS;
+            server_ip = Config.LOCAL_ADDRESS;
             System.out.println(server_ip);
             socket = new Socket(server_ip, Config.PORT);
             System.out.println("成功连接到：" + socket.getRemoteSocketAddress());

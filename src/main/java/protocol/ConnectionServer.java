@@ -1,4 +1,4 @@
-package protocol;
+package main.java.protocol;
 
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;

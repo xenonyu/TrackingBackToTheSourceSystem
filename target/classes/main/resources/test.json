@@ -1,0 +1,12 @@
+{
+  "threatID": "10002",
+  "timeStamp": "123456788",
+  "threatType": 513,
+  "uploadSysID": "11111",
+  "threatUserID": "123123",
+  "threatEnterpriseID": "",
+  "threatCredenID": "",
+  "threatIP": "",
+  "threatIPSegment": "",
+  "otherMsg": ""
+}

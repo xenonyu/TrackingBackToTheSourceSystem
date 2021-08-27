@@ -1,13 +1,13 @@
-package useit;
+package main.java.useit;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import Public.DB_Operation;
-import abnormal_process.*;
-import ExternalFunction.*;
-import Individual_judge.*;
-import path_localize.*;
+import main.java.Public.DB_Operation;
+import main.java.abnormal_process.*;
+import main.java.ExternalFunction.*;
+import main.java.Individual_judge.*;
+import main.java.path_localize.*;
 
 public class main_pro {
     public static String Input(int closesc) {
@@ -41,7 +41,7 @@ public class main_pro {
     }
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        DB_Operation.Connect("register");
+        DB_Operation.GetConnection("register");
         int option = select_login_regist();
         if (option == 1) {
             String user = login_regist.login();
@@ -76,6 +76,5 @@ public class main_pro {
             }
         } else if (option == 2) login_regist.regist();
         else System.out.println("输入非法！");
-        DB_Operation.Close();
     }
 }

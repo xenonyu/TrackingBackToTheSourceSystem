@@ -1,11 +1,11 @@
-package Individual_judge;
+package main.java.Individual_judge;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import Public.DB_Operation;
+import main.java.Public.DB_Operation;
 
 public class Individual_judge_main {
     public static boolean Deal_inputdata(Connection inputDB) throws SQLException, ClassNotFoundException {
@@ -42,10 +42,9 @@ public class Individual_judge_main {
     }
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        Connection inputDataConn = DB_Operation.Connect("dzpj_aqts_202000628");
-        Connection abjudge = DB_Operation.Connect("abjudge");
+        Connection inputDataConn = DB_Operation.GetConnection("dzpj_aqts_202000628");
+        Connection abjudge = DB_Operation.GetConnection("abjudge");
         if (Deal_inputdata(inputDataConn)) System.out.println("Successful!");
         else System.out.println("falied!");
-        DB_Operation.Close();
     }
 }

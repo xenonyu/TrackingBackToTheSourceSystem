@@ -1,5 +1,4 @@
-package protocol;
-
+package main.java.protocol;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,9 +12,9 @@ public class ProtocolUtil {
     private static Map<Integer, String> msgImp = new HashMap<Integer, String>();
 
     static {
-        msgImp.put(0xA1520000, "protocol.MessageProtocol");
-//        msgImp.put(HeartBeatProtocol.TYPE,"protocol.HeartBeatProtocol");
-        msgImp.put(MessageProtocol.messageType, "protocol.MessageProtocol");
+        msgImp.put(0xA1520000, "main.java.protocol.MessageProtocol");
+//        msgImp.put(HeartBeatProtocol.TYPE,"main.java.protocol.HeartBeatProtocol");
+        msgImp.put(MessageProtocol.messageType, "main.java.protocol.MessageProtocol");
     }
 
     /**

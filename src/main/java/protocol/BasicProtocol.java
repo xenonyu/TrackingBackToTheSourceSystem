@@ -1,17 +1,19 @@
-package protocol;
+package main.java.protocol;
+
+import main.java.protocol.ProtocolUtil;
 
 import java.io.ByteArrayOutputStream;
 
 public abstract class BasicProtocol {
-    static final int VER_LEN = 1;
-    static final int SECURE_MODE_LEN = 1;
-    static final int RESERVED_LEN = 2;
-    static final int MESSAGE_SERIAL_LEN = 4;
-    static final int MESSAGE_LEN_LEN = 4;
-    static final int MESSAGE_TYPE_LEN = 4;
-    static final int SENDER_ID_LEN = 16;
-    static final int RECEIVER_ID_LEN = 16;
-    static final int HEADER_LEN = 48;
+    public static  final int VER_LEN = 1;
+    public static final int SECURE_MODE_LEN = 1;
+    public static final int RESERVED_LEN = 2;
+    public static final int MESSAGE_SERIAL_LEN = 4;
+    public static final int MESSAGE_LEN_LEN = 4;
+    public static final int MESSAGE_TYPE_LEN = 4;
+    public static final int SENDER_ID_LEN = 16;
+    public static final int RECEIVER_ID_LEN = 16;
+    public static final int HEADER_LEN = 48;
 
     /**
      * 获取包装好的byte[]

@@ -1,36 +1,37 @@
-package path_localize;
+package main.java.path_localize;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import AreaCheck.IPcheck;
-import Public.DB_Operation;
-import abnormal_process.AbnormalJson;
+import main.java.AreaCheck.IPcheck;
+import main.java.Public.DB_Operation;
+import main.java.abnormal_process.AbnormalJson;
+import java.util.Map;
 
 //攻击路径定位接口
 public class path_localize_main {
-    private static final Map<String, Integer> threatTypeArray = new HashMap<>();
+    private static final Map<String, Integer> threatType2Code = new HashMap<>();
     static {
-        threatTypeArray.put("dccskl", 0x01);
-        threatTypeArray.put("dczsrzsb", 0x02);
-        threatTypeArray.put("jfpbx", 0x03);
-        threatTypeArray.put("jxtlj", 0x04);
-        threatTypeArray.put("cfzfchbx", 0x05);
-        threatTypeArray.put("ycsjkjde", 0x06);
-        threatTypeArray.put("ycsjkjdl", 0x07);
-        threatTypeArray.put("dsjkqykjdlde", 0x08);
-        threatTypeArray.put("yhtypjdchzsb", 0x09);
-        threatTypeArray.put("yhbtpjdchzsb", 0x0A);
-        threatTypeArray.put("yhdccsrzsb", 0x0B);
-        threatTypeArray.put("yhpfbgpjzt", 0x0C);
-        threatTypeArray.put("dsjkjdl", 0x0D);
-        threatTypeArray.put("dsjkjdlde", 0x0E);
-        threatTypeArray.put("dccyjfp", 0x0F);
-        threatTypeArray.put("xtdccsrzsb", 0x10);
-        threatTypeArray.put("pjpfbgzt", 0x11);
+        threatType2Code.put("dccskl", 0x01);
+        threatType2Code.put("dczsrzsb", 0x02);
+        threatType2Code.put("jfpbx", 0x03);
+        threatType2Code.put("jxtlj", 0x04);
+        threatType2Code.put("cfzfchbx", 0x05);
+        threatType2Code.put("ycsjkjde", 0x06);
+        threatType2Code.put("ycsjkjdl", 0x07);
+        threatType2Code.put("dsjkqykjdlde", 0x08);
+        threatType2Code.put("yhtypjdchzsb", 0x09);
+        threatType2Code.put("yhbtpjdchzsb", 0x0A);
+        threatType2Code.put("yhdccsrzsb", 0x0B);
+        threatType2Code.put("yhpfbgpjzt", 0x0C);
+        threatType2Code.put("dsjkjdl", 0x0D);
+        threatType2Code.put("dsjkjdlde", 0x0E);
+        threatType2Code.put("dccyjfp", 0x0F);
+        threatType2Code.put("xtdccsrzsb", 0x10);
+        threatType2Code.put("pjpfbgzt", 0x11);
     }
     private static final Map<String, Integer> mapType = new HashMap<>();
     static {
@@ -52,36 +53,59 @@ public class path_localize_main {
         mapType.put("0x10", 0x10);
         mapType.put("0x11", 0x11);
     }
+    private static final Map<String, Integer> threatType2StartId = new HashMap<>();
+    static {
+        threatType2StartId.put("dccskl", 0);
+        threatType2StartId.put("dczsrzsb", 0);
+        threatType2StartId.put("jfpbx", 0);
+        threatType2StartId.put("jxtlj", 0);
+        threatType2StartId.put("cfzfchbx", 0);
+        threatType2StartId.put("ycsjkjde", 0);
+        threatType2StartId.put("ycsjkjdl", 0);
+        threatType2StartId.put("dsjkqykjdlde", 0);
+        threatType2StartId.put("yhtypjdchzsb", 0);
+        threatType2StartId.put("yhbtpjdchzsb", 0);
+        threatType2StartId.put("yhdccsrzsb", 0);
+        threatType2StartId.put("yhpfbgpjzt", 0);
+        threatType2StartId.put("dsjkjdl", 0);
+        threatType2StartId.put("dsjkjdlde", 0);
+        threatType2StartId.put("dccyjfp", 0);
+        threatType2StartId.put("xtdccsrzsb", 0);
+        threatType2StartId.put("pjpfbgzt", 0);
+    }
     public static <K,V> HashMap<V,K> reverse(Map<K,V> map) {
         HashMap<V,K> rev = new HashMap<>();
         for(Map.Entry<K,V> entry : map.entrySet())
             rev.put(entry.getValue(), entry.getKey());
         return rev;
     }
-    static Map<Integer, String> swapped;
-    public path_localize_main(){
-        swapped = reverse(threatTypeArray);
-    }
+    static final Map<Integer, String> swapped = reverse(((threatType2Code)));
+
+//    private static map
     public static boolean Deal_inputdata(Connection conn) throws SQLException, ClassNotFoundException {
         List<Map<String, Object>> information;
-        information = DB_Operation.Select(conn, "*", "dccskl", "id>=0");
-        for (Map<String, Object> stringObjectMap : information) {
-            if (stringObjectMap.get("id") == null) return false;
-            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
-            AbnormalJson abJson = new AbnormalJson();
-            abJson.setThreatType(
-                    mapType.get(stringObjectMap.get("eventCode"))
-            );
-            abJson.setOriginID((Integer) stringObjectMap.get("id"));
-            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
-            abJson.setThreatUserID((String) stringObjectMap.get("userID"));
-            abJson.setThreatEnterpriseID("");
-            abJson.setThreatCredenID("");
-            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
-            abJson.setThreatedIP("");
-            if (!DB_Operation.Insert(conn, abJson)) return false;
+        String tableName;
+        Integer startId;
+        HandleDifferentAbnormal handler = new HandleDifferentAbnormal();
+        for (String t : threatType2Code.keySet()){
+            if (!t.equals("dccskl")) continue;
+            startId = threatType2StartId.get(t);
+            information = DB_Operation.Select(conn, "*", t, "id>=" + startId);
+            for (Map<String, Object> stringObjectMap : information) {
+                if (stringObjectMap.get("id") == null) return false;
+                try {
+                    Method handle = handler.getClass().getMethod(t, Map.class);
+                    AbnormalJson abJson = (AbnormalJson) handle.invoke(handler, stringObjectMap);
+                    if (!DB_Operation.Insert(conn, abJson)) return false;
+                }catch (Exception ex){
+                    System.out.println(ex);
+                }
+            }
         }
-        information = DB_Operation.Select(conn, "*", "dczsrzsb", "id>=0");
+
+        tableName = "dczsrzsb";
+        startId = threatType2StartId.get(tableName);
+        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
         for (Map<String, Object> stringObjectMap : information) {
             if (stringObjectMap.get("id") == null) return false;
             stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
@@ -98,7 +122,9 @@ public class path_localize_main {
             abJson.setThreatedIP("");
             if (!DB_Operation.Insert(conn, abJson)) return false;
         }
-        information = DB_Operation.Select(conn, "*", "jfpbx", "id>=0");
+        tableName ="jfpbx";
+        startId = threatType2StartId.get(tableName);
+        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
         for (Map<String, Object> stringObjectMap : information) {
             if (stringObjectMap.get("id") == null) return false;
             stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
@@ -115,7 +141,9 @@ public class path_localize_main {
             abJson.setThreatedIP("");
             if (!DB_Operation.Insert(conn, abJson)) return false;
         }
-        information = DB_Operation.Select(conn, "*", "jxtlj", "id>=0");
+        tableName ="jxtlj";
+        startId = threatType2StartId.get(tableName);
+        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
         for (Map<String, Object> stringObjectMap : information) {
             if (stringObjectMap.get("id") == null) return false;
             stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
@@ -132,7 +160,9 @@ public class path_localize_main {
             abJson.setThreatedIP((String) stringObjectMap.get("appIP"));
             if (!DB_Operation.Insert(conn, abJson)) return false;
         }
-        information = DB_Operation.Select(conn, "*", "cfzfchbx", "id>=0");
+        tableName ="cfzfchbx";
+        startId = threatType2StartId.get(tableName);
+        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
         for (Map<String, Object> stringObjectMap : information) {
             if (stringObjectMap.get("id") == null) return false;
             stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
@@ -149,7 +179,9 @@ public class path_localize_main {
             abJson.setThreatedIP("");
             if (!DB_Operation.Insert(conn, abJson)) return false;
         }
-        information = DB_Operation.Select(conn, "*", "yhtypjdchzsb", "id>=0");
+        tableName ="yhtypjdchzsb";
+        startId = threatType2StartId.get(tableName);
+        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
         for (Map<String, Object> stringObjectMap : information) {
             if (stringObjectMap.get("id") == null) return false;
             stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
@@ -166,7 +198,9 @@ public class path_localize_main {
             abJson.setThreatedIP("");
             if (!DB_Operation.Insert(conn, abJson)) return false;
         }
-        information = DB_Operation.Select(conn, "*", "yhbtpjdchzsb", "id>=0");
+        tableName ="yhbtpjdchzsb";
+        startId = threatType2StartId.get(tableName);
+        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
         for (Map<String, Object> stringObjectMap : information) {
             if (stringObjectMap.get("id") == null) return false;
             stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
@@ -183,7 +217,9 @@ public class path_localize_main {
             abJson.setThreatedIP("");
             if (!DB_Operation.Insert(conn, abJson)) return false;
         }
-        information = DB_Operation.Select(conn, "*", "yhdccsrzsb", "id>=0");
+        tableName ="yhdccsrzsb";
+        startId = threatType2StartId.get(tableName);
+        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
         for (Map<String, Object> stringObjectMap : information) {
             if (stringObjectMap.get("id") == null) return false;
             stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
@@ -200,7 +236,9 @@ public class path_localize_main {
             abJson.setThreatedIP("");
             if (!DB_Operation.Insert(conn, abJson)) return false;
         }
-        information = DB_Operation.Select(conn, "*", "yhpfbgpjzt", "id>=0");
+        tableName ="yhpfbgpjzt";
+        startId = threatType2StartId.get(tableName);
+        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
         for (Map<String, Object> stringObjectMap : information) {
             if (stringObjectMap.get("id") == null) return false;
             stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
@@ -217,7 +255,9 @@ public class path_localize_main {
             abJson.setThreatedIP("");
             if (!DB_Operation.Insert(conn, abJson)) return false;
         }
-        information = DB_Operation.Select(conn, "*", "dccyjfp", "id>=0");
+        tableName ="dccyjfp";
+        startId = threatType2StartId.get(tableName);
+        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
         for (Map<String, Object> stringObjectMap : information) {
             if (stringObjectMap.get("id") == null) return false;
             stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
@@ -234,7 +274,9 @@ public class path_localize_main {
             abJson.setThreatedIP("");
             if (!DB_Operation.Insert(conn, abJson)) return false;
         }
-        information = DB_Operation.Select(conn, "*", "xtdccsrzsb", "id>=0");
+        tableName ="xtdccsrzsb";
+        startId = threatType2StartId.get(tableName);
+        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
         for (Map<String, Object> stringObjectMap : information) {
             if (stringObjectMap.get("id") == null) return false;
             stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
@@ -255,11 +297,24 @@ public class path_localize_main {
 
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        Connection abnormalConn = DB_Operation.Connect("dzpj_aqts_202000628");
-        DB_Operation.Connect("abbehavior");
+    public static void handleAll() throws ClassNotFoundException, SQLException{
+        Connection abnormalConn = DB_Operation.GetConnection("dzpj_aqts_202000628");
+        DB_Operation.GetConnection("abbehavior");
         if (Deal_inputdata(abnormalConn)) System.out.println("Successful!");
         else System.out.println("falied!");
-        DB_Operation.Close();
+    }
+
+    public static void main(String[] args)  {
+        Date startDate = new Date();
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                try {
+                    handleAll();
+                } catch (ClassNotFoundException | SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, startDate,  1000);
     }
 }

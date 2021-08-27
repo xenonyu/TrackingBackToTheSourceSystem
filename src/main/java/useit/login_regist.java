@@ -1,4 +1,4 @@
-package useit;
+package main.java.useit;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import Public.DB_Operation;
+import main.java.Public.DB_Operation;
 
 public class login_regist {
     public static String Input(int closesc) {
@@ -18,7 +18,7 @@ public class login_regist {
     }
 
     public static void regist() throws SQLException, ClassNotFoundException {
-        Connection conn = DB_Operation.Connect("registmessage");
+        Connection conn = DB_Operation.GetConnection("registmessage");
         System.out.println("请输入您要注册的用户名：");
         String user = Input(0);
         List<Map<String, Object>> checkuser = DB_Operation.Select(conn,"user", "registmessage", "user="+user);
@@ -46,7 +46,7 @@ public class login_regist {
     }
 
     public static String login() throws SQLException, ClassNotFoundException {
-        Connection conn = DB_Operation.Connect("registmessage");
+        Connection conn = DB_Operation.GetConnection("registmessage");
         System.out.println("请输入您的用户名：");
         String user = Input(0);
         List<Map<String, Object>> checkuser = DB_Operation.Select(conn,"user", "registmessage", "user="+user);

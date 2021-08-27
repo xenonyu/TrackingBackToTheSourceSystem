@@ -1,12 +1,12 @@
-package Individual_judge;
+package main.java.Individual_judge;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import AreaCheck.IPcheck;
-import Public.DB_Operation;
+import main.java.AreaCheck.IPcheck;
+import main.java.Public.DB_Operation;
 
 public class Modify_judgeby_EventType {
     //向本地异常事件数据库中插入或更新数据

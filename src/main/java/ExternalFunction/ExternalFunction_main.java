@@ -1,10 +1,10 @@
-package ExternalFunction;
+package main.java.ExternalFunction;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import Public.DB_Operation;
+import main.java.Public.DB_Operation;
 
 public class ExternalFunction_main {
     public static String Input(int closesc) {
@@ -31,7 +31,7 @@ public class ExternalFunction_main {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         int option = selectfunctions();
         if (option == 1) {
-            Connection conn = DB_Operation.Connect("abbehavior");
+            Connection conn = DB_Operation.GetConnection("abbehavior");
             System.out.println("Please input the abnormal behavior's ID:");
             String AbBehaviorID = Input(1);
             int EventCode = AbBehavior.EventCodeCheck(conn, AbBehaviorID);
@@ -42,14 +42,14 @@ public class ExternalFunction_main {
                 System.out.println("Check successfully!");
             } else System.out.println("Check failed!");
         } else if (option == 2) {
-            Connection conn = DB_Operation.Connect("abbehavior");
+            Connection conn = DB_Operation.GetConnection("abbehavior");
             System.out.println("Please input the abnormal behavior's ID:");
             String AbBehaviorID = Input(1);
             if (AbBehavior.Delete_AbBehavior(conn, AbBehaviorID))
                 System.out.println("Delete successfully!");
             else System.out.println("Delete failed!");
         } else if (option == 3) {
-            Connection conn = DB_Operation.Connect("abjudge");
+            Connection conn = DB_Operation.GetConnection("abjudge");
             System.out.println("Please input the abnormal event's ID:");
             String EventID = Input(1);
             int EventType = AbEvent.EventTypeCheck(conn, EventID);
@@ -60,13 +60,12 @@ public class ExternalFunction_main {
                 System.out.println("Check successfully!");
             } else System.out.println("Check failed!");
         } else if (option == 4) {
-            DB_Operation.Connect("abjudge");
+            DB_Operation.GetConnection("abjudge");
             System.out.println("Please input the abnormal event's ID:");
             String EventID = Input(1);
             if (AbEvent.Delete_AbEvent(EventID))
                 System.out.println("Delete successfully!");
             else System.out.println("Delete failed!");
         } else System.out.println("Input error!");
-        DB_Operation.Close();
     }
 }

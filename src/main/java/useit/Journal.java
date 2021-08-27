@@ -1,4 +1,4 @@
-package useit;
+package main.java.useit;
 
 import java.sql.Connection;
 import java.util.Date;
@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import Public.DB_Operation;
+import main.java.Public.DB_Operation;
 
 public class Journal {
     public static String gettime() {
@@ -24,7 +24,7 @@ public class Journal {
         value.put(Columnname[0], user);
         value.put(Columnname[1], gettime());
         value.put(Columnname[2], event);
-        Connection conn = DB_Operation.Connect("journal");
+        Connection conn = DB_Operation.GetConnection("journal");
         DB_Operation.Insert(conn, "journal", Columnname, value);
     }
 }

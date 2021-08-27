@@ -1,32 +1,46 @@
-package Public;
+package main.java.Public;
 
-import abnormal_process.AbnormalJson;
+import main.java.abnormal_process.AbnormalJson;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 //对数据库的公共操作
 public class DB_Operation {
     public static Connection con;
     static String driver = "com.mysql.jdbc.Driver";
     static String databaseuser = "root";
-    static String password = "ccflab";
+    static String password = "root19123!@#&";
+    private static Map<String, Connection> DB_CONN = new HashMap<String, Connection>();
 
-    public static Connection Connect(String DB_name) throws ClassNotFoundException, SQLException {
+    public static Connection GetConnection(String DB_name) throws ClassNotFoundException, SQLException {
         //数据库连接
+        if (DB_CONN.containsKey(DB_name)) {
+            return DB_CONN.get(DB_name);
+        }
         Class.forName(driver);
-        String url = "jdbc:mysql://202.120.39.22:33060/" + DB_name + "?useUnicode=true&characterEncoding=utf-8&useSSL=false";
-        con = DriverManager.getConnection(url, databaseuser, password);
+        String url = "jdbc:mysql://10.10.27.230:3306/" + DB_name + "?useUnicode=true&characterEncoding=utf-8&useSSL=false";
+        System.out.println(url);
+        DriverManager.setLoginTimeout(1);
+        Properties properties = new Properties();
+        properties.put("connectTimeout", "2000");
+        properties.put("user", databaseuser);
+        properties.put("password", password);
+        try{
+            con = DriverManager.getConnection(url, properties);
+        } catch (Exception ex) {
+            System.out.print(ex);
+            url = "jdbc:mysql://202.120.39.22:33060/" + DB_name;
+            properties.put("password", "ccflab");
+            con = DriverManager.getConnection(url, properties);
+        }
+        DB_CONN.put(DB_name, con);
         return con;
-    }
-
-    public static void Close() throws SQLException {
-        //数据库关闭
-        con.close();
     }
 
     //几种不同的增删改查方法
@@ -119,21 +133,22 @@ public class DB_Operation {
         }
     }
     public static boolean Insert(Connection conn, AbnormalJson abJson) throws SQLException {
-        String sql = "replace into abbehavior.abbehavior values(?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "replace into abbehavior.abbehavior values(?, ?,?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement pstmt=conn.prepareStatement(sql);
-        pstmt.setString(1, abJson.getThreatID());
-        pstmt.setInt(2, abJson.getOriginID());
-        pstmt.setString(3, abJson.getTimeStamp());
-        pstmt.setInt(4, abJson.getThreatType());
-        pstmt.setString(5, abJson.getUploadSysID());
-        pstmt.setString(6, abJson.getThreatUserID());
-        pstmt.setString(7, abJson.getThreatEnterpriseID());
-        pstmt.setString(8, abJson.getThreatCredenID());
-        pstmt.setString(9, abJson.getThreatIP());
-        pstmt.setString(10, abJson.getThreatedIP());
-        pstmt.setString(11, abJson.getThreatIPSegment());
-        pstmt.setString(12, abJson.getOtherMsg());
-
+        pstmt.setString(1, null);
+        pstmt.setString(2, abJson.getThreatID());
+        pstmt.setInt(3, abJson.getOriginID());
+        pstmt.setString(4, abJson.getTimeStamp());
+        pstmt.setInt(5, abJson.getThreatType());
+        pstmt.setString(6, abJson.getUploadSysID());
+        pstmt.setString(7, abJson.getThreatUserID());
+        pstmt.setString(8, abJson.getThreatEnterpriseID());
+        pstmt.setString(9, abJson.getThreatCredenID());
+        pstmt.setString(10, abJson.getThreatIP());
+        pstmt.setString(11, abJson.getThreatedIP());
+        pstmt.setString(12, abJson.getThreatIPSegment());
+        pstmt.setString(13, abJson.getOtherMsg());
+        String test = pstmt.toString();
         int res=pstmt.executeUpdate();
         pstmt.close();
         if(res>0){

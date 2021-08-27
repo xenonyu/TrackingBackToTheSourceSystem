@@ -1,4 +1,4 @@
-package protocol;
+package main.java.protocol;
 
 /**
  * Created by meishan on 16/12/2.

@@ -1,11 +1,11 @@
-package AreaCheck;
+package main.java.AreaCheck;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import Public.DB_Operation;
+import main.java.Public.DB_Operation;
 //实现基于IP地址的查询
 public class IPcheck {
 	public static String Input() {
@@ -63,7 +63,7 @@ public class IPcheck {
 	}
 	public static String IPcheckmain(String strip) throws ClassNotFoundException, SQLException {
 		//IP地址查询主方法
-		Connection conn = DB_Operation.Connect("ipdatabase");
+		Connection conn = DB_Operation.GetConnection("ipdatabase");
 		int intip = iptranslate(strip);
 		if(intip == -1)
 			return null;

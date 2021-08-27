@@ -1,12 +1,11 @@
-package abnormal_process;
+package main.java.abnormal_process;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import Public.DB_Operation;
+import main.java.Public.DB_Operation;
 
 //应急联动处置接口
 public class AbnormalProcessMain {
@@ -129,11 +128,11 @@ public class AbnormalProcessMain {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
-        Connection abBehaviorDB = DB_Operation.Connect("abbehavior");
+        Connection abBehaviorDB = DB_Operation.GetConnection("abbehavior");
         AuthAbBehavior(abBehaviorDB);
         CredAbBehavior(abBehaviorDB);
         ServAbBehavior(abBehaviorDB);
-        Connection abJudge = DB_Operation.Connect("abjudge");
+        Connection abJudge = DB_Operation.GetConnection("abjudge");
         AbEvent(abJudge);
     }
 }

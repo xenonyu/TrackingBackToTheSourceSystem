@@ -1,0 +1,160 @@
+[
+  {
+    "name": "fwqyc",
+    "ycxwData": {
+      "threatID": "100050",
+      "timeStamp": "123456788",
+      "threatType": 256,
+      "uploadSysID": "11111",
+      "threatUserID": "34141",
+      "threatEnterpriseID": "42341",
+      "threatCredenID": "431431",
+      "threatIP": "123.46.78.234",
+      "threatIPSegment": "192.168.0.0",
+      "otherMsg": ""
+    }
+  },
+  {
+    "name": "fwqfm",
+    "ycxwData": {
+      "threatID": "10002",
+      "timeStamp": "123456788",
+      "threatType": 257,
+      "uploadSysID": "11111",
+      "threatUserID": "34141",
+      "threatEnterpriseID": "42341",
+      "threatCredenID": "431431",
+      "threatIP": "123.46.78.234",
+      "threatIPSegment": "192.168.0.0",
+      "otherMsg": ""
+    }
+  },
+  {
+    "name": "jxtlj",
+    "ycxwData": {
+      "threatID": "10003",
+      "timeStamp": "123456788",
+      "threatType": 258,
+      "uploadSysID": "11111",
+      "threatUserID": "34141",
+      "threatEnterpriseID": "42341",
+      "threatCredenID": "431431",
+      "threatIP": "123.46.78.234",
+      "threatIPSegment": "192.168.0.0",
+      "otherMsg": ""
+    }
+  },
+  {
+    "name": "dccskl",
+    "ycxwData": {
+      "threatID": "10003",
+      "timeStamp": "123456788",
+      "threatType": 512,
+      "uploadSysID": "11111",
+      "threatUserID": "123123",
+      "threatEnterpriseID": "",
+      "threatCredenID": "",
+      "threatIP": "123.46.78.234",
+      "threatIPSegment": "",
+      "otherMsg": "Huangpu"
+    }
+  },
+  {
+    "name": "yhdccskl",
+    "ycxwData": {
+      "threatID": "10003",
+      "timeStamp": "123456788",
+      "threatType": 513,
+      "uploadSysID": "11111",
+      "threatUserID": "123123",
+      "threatEnterpriseID": "",
+      "threatCredenID": "",
+      "threatIP": "123.46.78.234",
+      "threatIPSegment": "",
+      "otherMsg": "Huangpu"
+    }
+  },
+  {
+    "name": "kpbxyc",
+    "ycxwData": {
+      "threatID": "100242",
+      "timeStamp": "123456788",
+      "threatType": 768,
+      "uploadSysID": "11111",
+      "threatUserID": "0x0006",
+      "threatEnterpriseID": "",
+      "threatCredenID": "",
+      "threatIP": "85.68.215.124",
+      "threatIPSegment": "",
+      "otherMsg": "Huangpu"
+    }
+  },
+  {
+    "name": "cfbxzfchpjbx",
+    "ycxwData": {
+      "threatID": "10003",
+      "timeStamp": "123456788",
+      "threatType": 769,
+      "uploadSysID": "11111",
+      "threatUserID": "0x0006",
+      "threatEnterpriseID": "",
+      "threatCredenID": "",
+      "threatIP": "85.68.215.124",
+      "threatIPSegment": "",
+      "otherMsg": "Huangpu"
+    }
+  },
+  {
+    "name": "jfpbx",
+    "ycxwData": {
+      "threatID": "100034",
+      "timeStamp": "123456788",
+      "threatType": 770,
+      "uploadSysID": "11111",
+      "threatUserID": "0x0006",
+      "threatEnterpriseID": "",
+      "threatCredenID": "",
+      "threatIP": "85.68.215.124",
+      "threatIPSegment": "",
+      "otherMsg": "Huangpu"
+    }
+  },
+  {
+    "name": "tyqydsskjdlpj",
+    "ycxwData": {
+      "threatID": "10003",
+      "timeStamp": "123456788",
+      "threatType": 771,
+      "uploadSysID": "11111",
+      "threatUserID": [
+        "0x0006",
+        "0x0106",
+        "0x0206"
+      ],
+      "threatEnterpriseID": "",
+      "threatCredenID": "",
+      "threatIP": "85.68.215.124",
+      "threatIPSegment": "",
+      "otherMsg": "Huangpu"
+    }
+  },
+  {
+    "name": "tyqydsjkjdldepj",
+    "ycxwData": {
+      "threatID": "10003",
+      "timeStamp": "123456788",
+      "threatType": 768,
+      "uploadSysID": "11111",
+      "threatUserID": [
+        "0x0006",
+        "0x0106",
+        "0x0206"
+      ],
+      "threatEnterpriseID": "",
+      "threatCredenID": "",
+      "threatIP": "85.68.215.124",
+      "threatIPSegment": "",
+      "otherMsg": "Huangpu"
+    }
+  }
+]

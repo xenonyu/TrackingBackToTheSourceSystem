@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" build-on-make="true" name="TracingBackToTheSourceSystemTomcat">
+    <output-path>$PROJECT_DIR$/out/artifacts/TracingBackToTheSourceSystemTomcat</output-path>
+    <root id="root">
+      <element id="archive" name="TracingBackToTheSourceSystem.jar">
+        <element id="module-output" name="TracingBackToTheSourceSystem" />
+      </element>
+    </root>
+  </artifact>
+</component>
