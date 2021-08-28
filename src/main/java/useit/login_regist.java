@@ -35,7 +35,7 @@ public class login_regist {
             Columnname[1] = "password";
             value.put("user", user);
             value.put("password", password);
-            if (DB_Operation.Insert(conn, "registmessage", Columnname, value)) {
+            if (DB_Operation.UpdateAbnormal(conn, "registmessage", Columnname, value)) {
                 System.out.println("注册成功！");
                 Journal.write(user, "尝试注册成功");
             } else {

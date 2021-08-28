@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
-import main.java.AreaCheck.IPcheck;
 import main.java.Public.DB_Operation;
 import main.java.abnormal_process.AbnormalJson;
 import java.util.Map;
@@ -82,223 +81,54 @@ public class path_localize_main {
     static final Map<Integer, String> swapped = reverse(((threatType2Code)));
 
 //    private static map
-    public static boolean Deal_inputdata(Connection conn) throws SQLException, ClassNotFoundException {
+    public static boolean Deal_inputdata(Connection conn) {
         List<Map<String, Object>> information;
         String tableName;
         Integer startId;
         HandleDifferentAbnormal handler = new HandleDifferentAbnormal();
         for (String t : threatType2Code.keySet()){
-            if (!t.equals("dccskl")) continue;
+//            if (!t.equals("dccskl")) continue;
             startId = threatType2StartId.get(t);
-            information = DB_Operation.Select(conn, "*", t, "id>=" + startId);
-            for (Map<String, Object> stringObjectMap : information) {
-                if (stringObjectMap.get("id") == null) return false;
-                try {
+            try
+            {
+                information = DB_Operation.Select(conn, "*", t, "id>=" + startId);
+                for (Map<String, Object> stringObjectMap : information) {
+                    if (stringObjectMap.get("id") == null) return false;
                     Method handle = handler.getClass().getMethod(t, Map.class);
                     AbnormalJson abJson = (AbnormalJson) handle.invoke(handler, stringObjectMap);
-                    if (!DB_Operation.Insert(conn, abJson)) return false;
-                }catch (Exception ex){
-                    System.out.println(ex);
+
+                    if (!DB_Operation.UpdateAbnormal(conn, abJson)) return false;
+                    if (abJson.getOriginID() > startId) threatType2StartId.put(t, abJson.getOriginID());
+                    Thread t1 = new Thread(() -> {
+                        try {
+                            handle.invoke(handler, stringObjectMap);
+                        } catch (IllegalAccessException | InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    t1.start();
+                    Thread t2 = new Thread(() -> {
+                        try {
+                            AbnormalJson abJson1 = (AbnormalJson) handle.invoke(handler, stringObjectMap);
+                        } catch (IllegalAccessException | InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    t2.start();
                 }
             }
-        }
-
-        tableName = "dczsrzsb";
-        startId = threatType2StartId.get(tableName);
-        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
-        for (Map<String, Object> stringObjectMap : information) {
-            if (stringObjectMap.get("id") == null) return false;
-            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
-            AbnormalJson abJson = new AbnormalJson();
-            abJson.setThreatType(
-                    mapType.get(stringObjectMap.get("eventCode"))
-            );
-            abJson.setOriginID((Integer) stringObjectMap.get("id"));
-            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
-            abJson.setThreatUserID((String) stringObjectMap.get("authCertiUserID"));
-            abJson.setThreatEnterpriseID((String) stringObjectMap.get("authCertiSysID"));
-            abJson.setThreatCredenID("");
-            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
-            abJson.setThreatedIP("");
-            if (!DB_Operation.Insert(conn, abJson)) return false;
-        }
-        tableName ="jfpbx";
-        startId = threatType2StartId.get(tableName);
-        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
-        for (Map<String, Object> stringObjectMap : information) {
-            if (stringObjectMap.get("id") == null) return false;
-            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
-            AbnormalJson abJson = new AbnormalJson();
-            abJson.setThreatType(
-                    mapType.get(stringObjectMap.get("eventCode"))
-            );
-            abJson.setOriginID((Integer) stringObjectMap.get("id"));
-            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
-            abJson.setThreatUserID((String) stringObjectMap.get("agent"));
-            abJson.setThreatEnterpriseID((String) stringObjectMap.get("paymentCompany"));
-            abJson.setThreatCredenID((String)stringObjectMap.get("netticketID"));
-            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
-            abJson.setThreatedIP("");
-            if (!DB_Operation.Insert(conn, abJson)) return false;
-        }
-        tableName ="jxtlj";
-        startId = threatType2StartId.get(tableName);
-        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
-        for (Map<String, Object> stringObjectMap : information) {
-            if (stringObjectMap.get("id") == null) return false;
-            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
-            AbnormalJson abJson = new AbnormalJson();
-            abJson.setThreatType(
-                    mapType.get(stringObjectMap.get("eventCode"))
-            );
-            abJson.setOriginID((Integer) stringObjectMap.get("id"));
-            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
-            abJson.setThreatUserID("");
-            abJson.setThreatEnterpriseID("");
-            abJson.setThreatCredenID("");
-            abJson.setThreatIP((String) stringObjectMap.get("fakeSysIP"));
-            abJson.setThreatedIP((String) stringObjectMap.get("appIP"));
-            if (!DB_Operation.Insert(conn, abJson)) return false;
-        }
-        tableName ="cfzfchbx";
-        startId = threatType2StartId.get(tableName);
-        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
-        for (Map<String, Object> stringObjectMap : information) {
-            if (stringObjectMap.get("id") == null) return false;
-            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
-            AbnormalJson abJson = new AbnormalJson();
-            abJson.setThreatType(
-                    mapType.get(stringObjectMap.get("eventCode"))
-            );
-            abJson.setOriginID((Integer) stringObjectMap.get("id"));
-            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
-            abJson.setThreatUserID((String) stringObjectMap.get("agent"));
-            abJson.setThreatEnterpriseID((String) stringObjectMap.get("paymentCompany"));
-            abJson.setThreatCredenID((String) stringObjectMap.get("netticketID"));
-            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
-            abJson.setThreatedIP("");
-            if (!DB_Operation.Insert(conn, abJson)) return false;
-        }
-        tableName ="yhtypjdchzsb";
-        startId = threatType2StartId.get(tableName);
-        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
-        for (Map<String, Object> stringObjectMap : information) {
-            if (stringObjectMap.get("id") == null) return false;
-            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
-            AbnormalJson abJson = new AbnormalJson();
-            abJson.setThreatType(
-                    mapType.get(stringObjectMap.get("eventCode"))
-            );
-            abJson.setOriginID((Integer) stringObjectMap.get("id"));
-            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
-            abJson.setThreatUserID((String) stringObjectMap.get("agent"));
-            abJson.setThreatEnterpriseID("");
-            abJson.setThreatCredenID((String) stringObjectMap.get("netticketID"));
-            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
-            abJson.setThreatedIP("");
-            if (!DB_Operation.Insert(conn, abJson)) return false;
-        }
-        tableName ="yhbtpjdchzsb";
-        startId = threatType2StartId.get(tableName);
-        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
-        for (Map<String, Object> stringObjectMap : information) {
-            if (stringObjectMap.get("id") == null) return false;
-            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
-            AbnormalJson abJson = new AbnormalJson();
-            abJson.setThreatType(
-                    mapType.get(stringObjectMap.get("eventCode"))
-            );
-            abJson.setOriginID((Integer) stringObjectMap.get("id"));
-            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
-            abJson.setThreatUserID((String) stringObjectMap.get("agent"));
-            abJson.setThreatEnterpriseID("");
-            abJson.setThreatCredenID((String) stringObjectMap.get("netticketID"));
-            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
-            abJson.setThreatedIP("");
-            if (!DB_Operation.Insert(conn, abJson)) return false;
-        }
-        tableName ="yhdccsrzsb";
-        startId = threatType2StartId.get(tableName);
-        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
-        for (Map<String, Object> stringObjectMap : information) {
-            if (stringObjectMap.get("id") == null) return false;
-            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
-            AbnormalJson abJson = new AbnormalJson();
-            abJson.setThreatType(
-                    mapType.get(stringObjectMap.get("eventCode"))
-            );
-            abJson.setOriginID((Integer) stringObjectMap.get("id"));
-            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
-            abJson.setThreatUserID((String) stringObjectMap.get("authUserID"));
-            abJson.setThreatEnterpriseID("");
-            abJson.setThreatCredenID("");
-            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
-            abJson.setThreatedIP("");
-            if (!DB_Operation.Insert(conn, abJson)) return false;
-        }
-        tableName ="yhpfbgpjzt";
-        startId = threatType2StartId.get(tableName);
-        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
-        for (Map<String, Object> stringObjectMap : information) {
-            if (stringObjectMap.get("id") == null) return false;
-            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
-            AbnormalJson abJson = new AbnormalJson();
-            abJson.setThreatType(
-                    mapType.get(stringObjectMap.get("eventCode"))
-            );
-            abJson.setOriginID((Integer) stringObjectMap.get("id"));
-            abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
-            abJson.setThreatUserID((String) stringObjectMap.get("Agent"));
-            abJson.setThreatEnterpriseID("");
-            abJson.setThreatCredenID((String)stringObjectMap.get("netticketID"));
-            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
-            abJson.setThreatedIP("");
-            if (!DB_Operation.Insert(conn, abJson)) return false;
-        }
-        tableName ="dccyjfp";
-        startId = threatType2StartId.get(tableName);
-        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
-        for (Map<String, Object> stringObjectMap : information) {
-            if (stringObjectMap.get("id") == null) return false;
-            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
-            AbnormalJson abJson = new AbnormalJson();
-            abJson.setThreatType(
-                    mapType.get(stringObjectMap.get("eventCode"))
-            );
-            abJson.setOriginID((Integer) stringObjectMap.get("id"));
-            abJson.setUploadSysID((String) stringObjectMap.get("appID"));
-            abJson.setThreatUserID((String) stringObjectMap.get("appUserID"));
-            abJson.setThreatEnterpriseID("");
-            abJson.setThreatCredenID("");
-            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
-            abJson.setThreatedIP("");
-            if (!DB_Operation.Insert(conn, abJson)) return false;
-        }
-        tableName ="xtdccsrzsb";
-        startId = threatType2StartId.get(tableName);
-        information = DB_Operation.Select(conn, "*", tableName, "id>=" + startId);
-        for (Map<String, Object> stringObjectMap : information) {
-            if (stringObjectMap.get("id") == null) return false;
-            stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
-            AbnormalJson abJson = new AbnormalJson();
-            abJson.setThreatType(
-                    mapType.get(stringObjectMap.get("eventCode"))
-            );
-            abJson.setOriginID((Integer) stringObjectMap.get("id"));
-            abJson.setUploadSysID((String) stringObjectMap.get("authSysID"));
-            abJson.setThreatUserID("");
-            abJson.setThreatEnterpriseID("");
-            abJson.setThreatCredenID("");
-            abJson.setThreatIP((String) stringObjectMap.get("appIP"));
-            abJson.setThreatedIP("");
-            if (!DB_Operation.Insert(conn, abJson)) return false;
+            catch (Exception ex)
+            {
+                System.out.println(ex);
+            }
         }
         return true;
 
     }
 
     public static void handleAll() throws ClassNotFoundException, SQLException{
-        Connection abnormalConn = DB_Operation.GetConnection("dzpj_aqts_202000628");
+//        Connection abnormalConn = DB_Operation.GetConnection("dzpj_aqts_202000628");
+        Connection abnormalConn = DB_Operation.GetConnection("ycxw");
         DB_Operation.GetConnection("abbehavior");
         if (Deal_inputdata(abnormalConn)) System.out.println("Successful!");
         else System.out.println("falied!");

@@ -25,6 +25,6 @@ public class Journal {
         value.put(Columnname[1], gettime());
         value.put(Columnname[2], event);
         Connection conn = DB_Operation.GetConnection("journal");
-        DB_Operation.Insert(conn, "journal", Columnname, value);
+        DB_Operation.UpdateAbnormal(conn, "journal", Columnname, value);
     }
 }

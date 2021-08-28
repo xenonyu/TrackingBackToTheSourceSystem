@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import main.java.AreaCheck.IPcheck;
 import main.java.Public.DB_Operation;
 
 public class Modify_judgeby_EventType {
@@ -59,7 +58,7 @@ public class Modify_judgeby_EventType {
         Columnname[7] = "entAreaName";
 //        result[5] = IPcheck.IPcheckmain(result[5]);
 //        result[7] = IPcheck.IPcheckmain(result[7]);
-        return DB_Operation.Insert(conn, "abjudge.judgetable", Columnname, result.get(0));
+        return DB_Operation.UpdateAbnormal(conn, "abjudge.judgetable", Columnname, result.get(0));
     }
 
     public static boolean Insert_Type1(Connection conn, String EventID) throws SQLException, ClassNotFoundException {
@@ -78,6 +77,6 @@ public class Modify_judgeby_EventType {
         Columnname[7] = "credChaStaEntAreaName";
 //        result[5] = IPcheck.IPcheckmain(result[5]);
 //        result[7] = IPcheck.IPcheckmain(result[7]);
-        return DB_Operation.Insert(conn, "abjudge.judgetable", Columnname, result.get(0));
+        return DB_Operation.UpdateAbnormal(conn, "abjudge.judgetable", Columnname, result.get(0));
     }
 }

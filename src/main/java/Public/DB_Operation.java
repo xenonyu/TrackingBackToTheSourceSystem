@@ -132,7 +132,7 @@ public class DB_Operation {
             return false;
         }
     }
-    public static boolean Insert(Connection conn, AbnormalJson abJson) throws SQLException {
+    public static boolean UpdateAbnormal(Connection conn, AbnormalJson abJson) throws SQLException {
         String sql = "replace into abbehavior.abbehavior values(?, ?,?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement pstmt=conn.prepareStatement(sql);
         pstmt.setString(1, null);
@@ -152,12 +152,12 @@ public class DB_Operation {
         int res=pstmt.executeUpdate();
         pstmt.close();
         if(res>0){
-            System.out.println("更新数据成功");
+            System.out.println("refresh" + ": " + abJson.getThreatType() + " ID: " + abJson.getOriginID() );
             return true;
         }
         else return false;
     }
-    public static boolean Insert(Connection conn, String tablename, String[] Columnname, Map<String, Object> value) {
+    public static boolean UpdateAbnormal(Connection conn, String tablename, String[] Columnname, Map<String, Object> value) {
         try {
             //sql语句
             StringBuilder sql = new StringBuilder("insert into ");
