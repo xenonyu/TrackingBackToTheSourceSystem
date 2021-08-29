@@ -168,25 +168,11 @@ public class ProtocolUtil {
      */
     public static boolean writeOutputStream(BasicProtocol protocol, DataOutputStream outputStream) throws IOException {
 //            System.out.println("return message Len: " + protocol.getMessageLen() + " true len: " + protocol.getMessage().length());
+        byte[] a = protocol.getData();
         outputStream.write(protocol.getData());
         outputStream.flush();
         System.out.println("message contained: " + protocol.getMessageLen() + " bytes are sent.");
         return true;
-    }
-
-    public static byte[] str2ByteArrays(String str, int maxLength) {
-        if (str == null) {
-            return null;
-        }
-        byte[] dst = new byte[maxLength];
-        byte[] src = str.getBytes();
-        System.arraycopy(src, 0, dst, 0, src.length);
-//        System.out.println(maxLength);
-        return dst;
-    }
-
-    public static byte[] str2ByteArrays(String str) {
-        return str2ByteArrays(str, 16);
     }
 
     public static String byte2hex(byte buffer) {

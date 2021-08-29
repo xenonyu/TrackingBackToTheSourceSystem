@@ -50,19 +50,23 @@ public class AbnormalJson {
 
     }
 
-    public AbnormalJson(Integer threatType,
-                        String upLoadSysID,
-                        String threatUserID,
-                        String EnterpriseID,
-                        String CredenID,
-                        String threatIP,
-                        String threatedIP) {
+    public AbnormalJson(
+            Integer originID,
+            Integer threatType,
+            String upLoadSysID,
+            String threatUserID,
+            String EnterpriseID,
+            String CredenID,
+            String threatIP,
+            String threatedIP
+    ) {
 /**
  *timeStamp是String类型的时间戳
  * 这里设置发送消息
  * */
         setThreatID(Long.toString(getMicTime()));
         setTimeStamp(Long.toString(getMicTime()));
+        setOriginID(originID);
         setThreatType(threatType);
         setUploadSysID(upLoadSysID);
         setThreatUserID(threatUserID);
@@ -140,7 +144,7 @@ public class AbnormalJson {
 
     }
 
-    private void parseJsonMessage() {
+    public void parseJsonMessage() {
         JSONObject targetJson = new JSONObject();
 
         targetJson.put("threatID", getThreatID());

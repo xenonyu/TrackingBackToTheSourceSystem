@@ -49,7 +49,7 @@ class ThreatTypeUtil {
 public class PathLocalize {
     private final Connection conn = DB_Operation.GetConnection("ycxw");
     //DB_Operation.GetConnection("dzpj_aqts_202000628");
-    private static final Map<String, ThreatTypeUtil> threatType2Code = new HashMap<String, ThreatTypeUtil>() {
+    public static final Map<String, ThreatTypeUtil> threatType2Code = new HashMap<String, ThreatTypeUtil>() {
         {
             put("dccskl",       new ThreatTypeUtil(0x01, 0x0200, 0));
             put("jfpbx",        new ThreatTypeUtil(0x03, 0x0302, 0));
@@ -80,13 +80,15 @@ public class PathLocalize {
                 try
                 {
                     List<Map<String, Object>> information;
-                    information = DB_Operation.Select(conn, "*", t, "id>=" + startId);
+                    information = DB_Operation.Select(conn, "*", t, "id>" + startId);
                     for (Map<String, Object> stringObjectMap : information) {
                         Method handle = handler.getClass().getMethod(t, Map.class);
                         AbnormalJson abJson = (AbnormalJson) handle.invoke(handler, stringObjectMap);
                         DB_Operation.UpdateAbnormal(conn, abJson);
                         abJson.setThreatType(threatType2Code.get(t).getHandleCode());
-                        LongClient.abnormalQueue.put(abJson);
+                        abJson.analysisOtherMsg();
+                        abJson.parseJsonMessage();
+                        LongClient.putAbnormal(abJson);
                         if (abJson.getOriginID() > startId) threatType2Code.get(t).setStartId(abJson.getOriginID());
                     }
                 }
@@ -117,8 +119,7 @@ public class PathLocalize {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
-                if (Deal_inputdata()) System.out.println("Successful!");
-                else System.out.println("falied!");
+                Deal_inputdata();
             }
         }, startDate,  1000);
     }

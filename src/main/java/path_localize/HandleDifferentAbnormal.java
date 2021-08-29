@@ -1,6 +1,5 @@
 package main.java.path_localize;
 
-import main.java.AreaCheck.IPcheck;
 import main.java.abnormal_process.AbnormalJson;
 
 import java.util.HashMap;
@@ -27,12 +26,17 @@ public class HandleDifferentAbnormal {
         mapType.put("0x10", 0x10);
         mapType.put("0x11", 0x11);
     }
+    public static String _FUNC_() {
+        StackTraceElement traceElement = ((new Exception()).getStackTrace())[1];
+
+        return traceElement.getMethodName();
+    }
 
     public AbnormalJson dccskl(Map<String, Object> stringObjectMap) {
-        stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
-                mapType.get(stringObjectMap.get("eventCode"))
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
         );
         abJson.setOriginID((Integer) stringObjectMap.get("id"));
         abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
@@ -45,10 +49,10 @@ public class HandleDifferentAbnormal {
     }
 
     public AbnormalJson dczsrzsb(Map<String, Object> stringObjectMap) {
-        stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
-                mapType.get(stringObjectMap.get("eventCode"))
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
         );
         abJson.setOriginID((Integer) stringObjectMap.get("id"));
         abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
@@ -61,10 +65,10 @@ public class HandleDifferentAbnormal {
     }
 
     public AbnormalJson jfpbx(Map<String, Object> stringObjectMap) {
-        stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
-                mapType.get(stringObjectMap.get("eventCode"))
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
         );
         abJson.setOriginID((Integer) stringObjectMap.get("id"));
         abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
@@ -77,10 +81,10 @@ public class HandleDifferentAbnormal {
     }
 
     public AbnormalJson jxtlj(Map<String, Object> stringObjectMap) {
-        stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
-                mapType.get(stringObjectMap.get("eventCode"))
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
         );
         abJson.setOriginID((Integer) stringObjectMap.get("id"));
         abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
@@ -93,10 +97,10 @@ public class HandleDifferentAbnormal {
     }
 
     public AbnormalJson cfzfchbx(Map<String, Object> stringObjectMap) {
-        stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
-                mapType.get(stringObjectMap.get("eventCode"))
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
         );
         abJson.setOriginID((Integer) stringObjectMap.get("id"));
         abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
@@ -109,10 +113,10 @@ public class HandleDifferentAbnormal {
     }
 
     public AbnormalJson yhtypjdchzsb(Map<String, Object> stringObjectMap) {
-        stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
-                mapType.get(stringObjectMap.get("eventCode"))
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
         );
         abJson.setOriginID((Integer) stringObjectMap.get("id"));
         abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
@@ -125,10 +129,10 @@ public class HandleDifferentAbnormal {
     }
 
     public AbnormalJson yhbtpjdchzsb(Map<String, Object> stringObjectMap) {
-        stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
-                mapType.get(stringObjectMap.get("eventCode"))
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
         );
         abJson.setOriginID((Integer) stringObjectMap.get("id"));
         abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
@@ -141,10 +145,10 @@ public class HandleDifferentAbnormal {
     }
 
     public AbnormalJson yhdccsrzsb(Map<String, Object> stringObjectMap) {
-        stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
-                mapType.get(stringObjectMap.get("eventCode"))
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
         );
         abJson.setOriginID((Integer) stringObjectMap.get("id"));
         abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
@@ -157,10 +161,10 @@ public class HandleDifferentAbnormal {
     }
 
     public AbnormalJson yhpfbgpjzt(Map<String, Object> stringObjectMap) {
-        stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
-                mapType.get(stringObjectMap.get("eventCode"))
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
         );
         abJson.setOriginID((Integer) stringObjectMap.get("id"));
         abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
@@ -173,10 +177,10 @@ public class HandleDifferentAbnormal {
     }
 
     public AbnormalJson dccyjfp(Map<String, Object> stringObjectMap) {
-        stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
-                mapType.get(stringObjectMap.get("eventCode"))
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
         );
         abJson.setOriginID((Integer) stringObjectMap.get("id"));
         abJson.setUploadSysID((String) stringObjectMap.get("appID"));
@@ -189,10 +193,10 @@ public class HandleDifferentAbnormal {
     }
 
     public AbnormalJson xtdccsrzsb(Map<String, Object> stringObjectMap) {
-        stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
-                mapType.get(stringObjectMap.get("eventCode"))
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
         );
         abJson.setOriginID((Integer) stringObjectMap.get("id"));
         abJson.setUploadSysID((String) stringObjectMap.get("authSysID"));
@@ -205,14 +209,78 @@ public class HandleDifferentAbnormal {
     }
 
     public AbnormalJson pjpfbgzt(Map<String, Object> stringObjectMap) {
-        stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        AbnormalJson abJson = new AbnormalJson();
+        abJson.setOriginID((Integer) stringObjectMap.get("id"));
+        abJson.setThreatType(
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
+        );
+        abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+        abJson.setThreatUserID((String) stringObjectMap.get("agent"));
+        abJson.setThreatEnterpriseID("");
+        abJson.setThreatCredenID((String) stringObjectMap.get("netticketID"));
+        abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+        abJson.setThreatedIP("");
+        return abJson;
+    }
+
+    public AbnormalJson tyyhdccxxz(Map<String, Object> stringObjectMap) {
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
-                mapType.get(stringObjectMap.get("eventCode"))
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
         );
         abJson.setOriginID((Integer) stringObjectMap.get("id"));
-        abJson.setUploadSysID((String) stringObjectMap.get("authSysID"));
-        abJson.setThreatUserID("");
+        abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+        abJson.setThreatUserID((String) stringObjectMap.get("appUserID"));
+        abJson.setThreatEnterpriseID("");
+        abJson.setThreatCredenID("");
+        abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+        abJson.setThreatedIP("");
+        return abJson;
+    }
+
+    public AbnormalJson tykpcfjp(Map<String, Object> stringObjectMap) {
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        AbnormalJson abJson = new AbnormalJson();
+        abJson.setThreatType(
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
+        );
+        abJson.setOriginID((Integer) stringObjectMap.get("id"));
+        abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+        abJson.setThreatUserID((String) stringObjectMap.get(""));
+        abJson.setThreatEnterpriseID("");
+        abJson.setThreatCredenID("");
+        abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+        abJson.setThreatedIP("");
+        return abJson;
+    }
+
+    public AbnormalJson ytyxkpcfjp(Map<String, Object> stringObjectMap) {
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        AbnormalJson abJson = new AbnormalJson();
+        abJson.setThreatType(
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
+        );
+        abJson.setOriginID((Integer) stringObjectMap.get("id"));
+        abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+        abJson.setThreatUserID((String) stringObjectMap.get(""));
+        abJson.setThreatEnterpriseID("");
+        abJson.setThreatCredenID("");
+        abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+        abJson.setThreatedIP("");
+        return abJson;
+    }
+
+    public AbnormalJson cxezlkj(Map<String, Object> stringObjectMap) {
+        //stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        AbnormalJson abJson = new AbnormalJson();
+        abJson.setThreatType(
+                mapType.getOrDefault(stringObjectMap.get("eventCode"), PathLocalize.threatType2Code.get(_FUNC_()).getAnalysisCode())
+        );
+        abJson.setOriginID((Integer) stringObjectMap.get("id"));
+        abJson.setUploadSysID((String) stringObjectMap.get("pccCode"));
+        abJson.setThreatUserID((String) stringObjectMap.get("agent"));
         abJson.setThreatEnterpriseID("");
         abJson.setThreatCredenID("");
         abJson.setThreatIP((String) stringObjectMap.get("appIP"));

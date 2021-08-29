@@ -29,9 +29,10 @@ public abstract class BasicProtocol {
             baos.write(ProtocolUtil.int2ByteArrays(getMessageSerial()), 0, MESSAGE_SERIAL_LEN);
             baos.write(ProtocolUtil.int2ByteArrays(getMessageLen()), 0, MESSAGE_LEN_LEN);
             baos.write(ProtocolUtil.int2ByteArrays(getType()), 0, MESSAGE_TYPE_LEN);
-            baos.write(ProtocolUtil.str2ByteArrays(getSenderId()), 0, SENDER_ID_LEN);
-            baos.write(ProtocolUtil.str2ByteArrays(getReceiverId()), 0, RECEIVER_ID_LEN);
-            baos.write(ProtocolUtil.str2ByteArrays(getMessage(), getMessage().length()), 0, getMessageLen() - HEADER_LEN);
+            baos.write(getSenderId().getBytes(), 0, SENDER_ID_LEN);
+            baos.write(getReceiverId().getBytes(), 0, RECEIVER_ID_LEN);
+//
+            baos.write(getMessage().getBytes(), 0, getMessageLen() - HEADER_LEN);
 //            System.out.println(baos.toByteArray().length);
 
 //            baos.write(ProtocolUtil.int2ByteArrays(getSecureMode()), 0, SECURE_MODE_LEN);
@@ -45,7 +46,7 @@ public abstract class BasicProtocol {
 //            baos.write(ProtocolUtil.str2ByteArrays("11111111"), 0, 16);
             return baos.toByteArray();
         } catch (Exception e) {
-            System.out.print("Exception occurred\n");
+            System.out.print(e);
             return null;
         }
     }
