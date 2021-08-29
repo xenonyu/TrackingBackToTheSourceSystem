@@ -61,17 +61,23 @@ public class IPcheck {
         }
 		return str;
 	}
-	public static String IPcheckmain(String strip) throws ClassNotFoundException, SQLException {
+	public static String IPcheckmain(String strip)  {
 		//IP地址查询主方法
 		Connection conn = DB_Operation.GetConnection("ipdatabase");
 		int intip = iptranslate(strip);
 		if(intip == -1)
 			return null;
 		else {
-			String tableid = tablecheck(conn, intip);
-			List<Map<String, Object>> information = informationcheck(conn, tableid, intip);
-			return "continent:"+information.get(0).get("continent")+" country:"+information.get(0).get("country")
-					+" multiarea:"+information.get(0).get("multiarea")+" user:"+information.get(0).get("user");
+			String tableid;
+			try {
+				tableid = tablecheck(conn, intip);
+				List<Map<String, Object>> information = informationcheck(conn, tableid, intip);
+				return "continent:"+information.get(0).get("continent")+" country:"+information.get(0).get("country")
+						+" multiarea:"+information.get(0).get("multiarea")+" user:"+information.get(0).get("user");
+			} catch (SQLException throwables) {
+				throwables.printStackTrace();
+			}
 		}
+		return " ";
 	}
 }

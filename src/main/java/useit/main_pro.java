@@ -50,7 +50,7 @@ public class main_pro {
                 switch (option) {
                     case 1: {
                         Journal.write(user, "调用攻击路径定位接口");
-                        path_localize_main.main(args);
+                        PathLocalize.main(args);
                         break;
                     }
                     case 2: {

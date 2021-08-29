@@ -3,7 +3,6 @@ package main.java.path_localize;
 import main.java.AreaCheck.IPcheck;
 import main.java.abnormal_process.AbnormalJson;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +28,7 @@ public class HandleDifferentAbnormal {
         mapType.put("0x11", 0x11);
     }
 
-    public AbnormalJson dccskl(Map<String, Object> stringObjectMap) throws SQLException, ClassNotFoundException {
+    public AbnormalJson dccskl(Map<String, Object> stringObjectMap) {
         stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
@@ -45,7 +44,7 @@ public class HandleDifferentAbnormal {
         return abJson;
     }
 
-    public AbnormalJson dczsrzsb(Map<String, Object> stringObjectMap) throws SQLException, ClassNotFoundException {
+    public AbnormalJson dczsrzsb(Map<String, Object> stringObjectMap) {
         stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
@@ -61,7 +60,7 @@ public class HandleDifferentAbnormal {
         return abJson;
     }
 
-    public AbnormalJson jfpbx(Map<String, Object> stringObjectMap) throws SQLException, ClassNotFoundException {
+    public AbnormalJson jfpbx(Map<String, Object> stringObjectMap) {
         stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
@@ -77,7 +76,7 @@ public class HandleDifferentAbnormal {
         return abJson;
     }
 
-    public AbnormalJson jxtlj(Map<String, Object> stringObjectMap) throws SQLException, ClassNotFoundException {
+    public AbnormalJson jxtlj(Map<String, Object> stringObjectMap) {
         stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
@@ -93,7 +92,7 @@ public class HandleDifferentAbnormal {
         return abJson;
     }
 
-    public AbnormalJson cfzfchbx(Map<String, Object> stringObjectMap) throws SQLException, ClassNotFoundException {
+    public AbnormalJson cfzfchbx(Map<String, Object> stringObjectMap) {
         stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
@@ -109,7 +108,7 @@ public class HandleDifferentAbnormal {
         return abJson;
     }
 
-    public AbnormalJson yhtypjdchzsb(Map<String, Object> stringObjectMap) throws SQLException, ClassNotFoundException {
+    public AbnormalJson yhtypjdchzsb(Map<String, Object> stringObjectMap) {
         stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
@@ -125,7 +124,7 @@ public class HandleDifferentAbnormal {
         return abJson;
     }
 
-    public AbnormalJson yhbtpjdchzsb(Map<String, Object> stringObjectMap) throws SQLException, ClassNotFoundException {
+    public AbnormalJson yhbtpjdchzsb(Map<String, Object> stringObjectMap) {
         stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
@@ -141,7 +140,7 @@ public class HandleDifferentAbnormal {
         return abJson;
     }
 
-    public AbnormalJson yhdccsrzsb(Map<String, Object> stringObjectMap) throws SQLException, ClassNotFoundException {
+    public AbnormalJson yhdccsrzsb(Map<String, Object> stringObjectMap) {
         stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
@@ -157,7 +156,7 @@ public class HandleDifferentAbnormal {
         return abJson;
     }
 
-    public AbnormalJson yhpfbgpjzt(Map<String, Object> stringObjectMap) throws SQLException, ClassNotFoundException {
+    public AbnormalJson yhpfbgpjzt(Map<String, Object> stringObjectMap) {
         stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
@@ -173,7 +172,7 @@ public class HandleDifferentAbnormal {
         return abJson;
     }
 
-    public AbnormalJson dccyjfp(Map<String, Object> stringObjectMap) throws SQLException, ClassNotFoundException {
+    public AbnormalJson dccyjfp(Map<String, Object> stringObjectMap) {
         stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(
@@ -189,7 +188,23 @@ public class HandleDifferentAbnormal {
         return abJson;
     }
 
-    public AbnormalJson xtdccsrzsb(Map<String, Object> stringObjectMap) throws SQLException, ClassNotFoundException {
+    public AbnormalJson xtdccsrzsb(Map<String, Object> stringObjectMap) {
+        stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
+        AbnormalJson abJson = new AbnormalJson();
+        abJson.setThreatType(
+                mapType.get(stringObjectMap.get("eventCode"))
+        );
+        abJson.setOriginID((Integer) stringObjectMap.get("id"));
+        abJson.setUploadSysID((String) stringObjectMap.get("authSysID"));
+        abJson.setThreatUserID("");
+        abJson.setThreatEnterpriseID("");
+        abJson.setThreatCredenID("");
+        abJson.setThreatIP((String) stringObjectMap.get("appIP"));
+        abJson.setThreatedIP("");
+        return abJson;
+    }
+
+    public AbnormalJson pjpfbgzt(Map<String, Object> stringObjectMap) {
         stringObjectMap.put("sysAreaName", IPcheck.IPcheckmain((String) stringObjectMap.get("appIP")));
         AbnormalJson abJson = new AbnormalJson();
         abJson.setThreatType(

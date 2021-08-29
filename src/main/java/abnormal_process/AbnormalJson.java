@@ -45,6 +45,8 @@ public class AbnormalJson {
         threatTypeArray.put("不同企业或不同用户异常行为关联", 0x0901);
         threatTypeArray.put("多次查询/下载", 0x0A01);
         threatTypeArray.put("客票信息多次查验状态", 0x0B01);
+        threatTypeArray.put("同一用户同一电子凭据多次尝试核准失败", 0x0C01);
+        threatTypeArray.put("同一用户不同电子凭据多次尝试核准失败", 0x0C02);
 
     }
 

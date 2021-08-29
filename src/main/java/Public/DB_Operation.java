@@ -18,13 +18,17 @@ public class DB_Operation {
     static String password = "root19123!@#&";
     private static Map<String, Connection> DB_CONN = new HashMap<String, Connection>();
 
-    public static Connection GetConnection(String DB_name) throws ClassNotFoundException, SQLException {
+    public static Connection GetConnection(String DB_name) {
         //数据库连接
         if (DB_CONN.containsKey(DB_name)) {
             return DB_CONN.get(DB_name);
         }
-        Class.forName(driver);
-        String url = "jdbc:mysql://10.10.27.230:3306/" + DB_name + "?useUnicode=true&characterEncoding=utf-8&useSSL=false";
+        try {
+            Class.forName(driver);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        String url = "jdbc:mysql://localhost:3306/" + DB_name + "?useUnicode=true&characterEncoding=utf-8&useSSL=false";
         System.out.println(url);
         DriverManager.setLoginTimeout(1);
         Properties properties = new Properties();
@@ -37,7 +41,11 @@ public class DB_Operation {
             System.out.print(ex);
             url = "jdbc:mysql://202.120.39.22:33060/" + DB_name;
             properties.put("password", "ccflab");
-            con = DriverManager.getConnection(url, properties);
+            try {
+                con = DriverManager.getConnection(url, properties);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
         DB_CONN.put(DB_name, con);
         return con;
@@ -152,7 +160,7 @@ public class DB_Operation {
         int res=pstmt.executeUpdate();
         pstmt.close();
         if(res>0){
-            System.out.println("refresh" + ": " + abJson.getThreatType() + " ID: " + abJson.getOriginID() );
+            System.out.println("refresh" + ": eventCode\"" + abJson.getThreatType() + "\" ID: " + abJson.getOriginID() );
             return true;
         }
         else return false;
